@@ -30,11 +30,18 @@
             Grid.Row="0"
             ItemsSource="{Binding Tabs}"
             SelectedItem="{Binding CurrentTab}">
+
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Header}" />
                 </DataTemplate>
             </TabControl.ItemTemplate>
+
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding CurrentTab.Folder.Value}" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
         </TabControl>
 
         <!--  メイン領域：サムネ + プレビュー  -->
