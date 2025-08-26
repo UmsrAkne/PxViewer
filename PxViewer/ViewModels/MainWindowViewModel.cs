@@ -1,14 +1,12 @@
 ﻿using Prism.Mvvm;
+using PxViewer.Utils;
 
-namespace PxViewer.ViewModels;
-
-public class MainWindowViewModel : BindableBase
+namespace PxViewer.ViewModels
 {
-    private string _title = "Prism Application";
-
-    public string Title
+    public class MainWindowViewModel : BindableBase
     {
-        get => _title;
-        set => SetProperty(ref _title, value);
+        private readonly AppVersionInfo appVersionInfo = new ();
+
+        public string Title => appVersionInfo.GetAppNameWithVersion();
     }
 }
