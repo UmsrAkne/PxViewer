@@ -18,6 +18,11 @@ namespace PxViewer.Services
             string folderPath,
             CancellationToken ct = default)
         {
+            if (!Directory.Exists(folderPath))
+            {
+                return Array.Empty<ImageEntry>();
+            }
+
             var results = new List<ImageEntry>();
 
             foreach (var file in Directory.EnumerateFiles(folderPath))

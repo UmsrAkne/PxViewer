@@ -7,7 +7,7 @@ namespace PxViewer.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class ImageItemViewModel : BindableBase
     {
-        public ImageEntry Entry { get; }
+        public ImageEntry Entry { get; set; }
 
         public string ThumbnailPath { get; set; } = "";
 

@@ -32,6 +32,7 @@ namespace PxViewer
                     var tab = new TabViewModel(new FolderId(imagesDir));
                     vm.Tabs.Add(tab);
                     vm.CurrentTab = tab;
+                    vm.CurrentTab.LoadFilesCommand.Execute();
                 }
             }
             catch
