@@ -9,7 +9,7 @@
     Title="{Binding Title}"
     Width="1024"
     Height="640"
-    d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+    d:DataContext="{d:DesignInstance viewModels:DesignTimeMainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 

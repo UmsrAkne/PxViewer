@@ -4,7 +4,7 @@ using PxViewer.Utils;
 
 namespace PxViewer.ViewModels
 {
-    public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : BindableBase, IMainWindowVm
     {
         private readonly AppVersionInfo appVersionInfo = new ();
 
