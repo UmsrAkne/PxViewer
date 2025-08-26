@@ -68,13 +68,17 @@
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border Margin="2" Padding="4">
-                            <Image
-                                Width="296"
-                                Height="auto"
-                                Source="{Binding ThumbnailPath}"
-                                Stretch="Uniform" />
-                        </Border>
+                        <StackPanel>
+
+                            <Border Margin="2" Padding="4">
+                                <Image
+                                    Width="296"
+                                    Height="auto"
+                                    Source="{Binding ThumbnailPath}"
+                                    Stretch="Uniform" />
+                            </Border>
+                            <TextBlock Text="{Binding FileName}" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

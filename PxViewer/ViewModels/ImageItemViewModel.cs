@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows.Media;
 using Prism.Mvvm;
 using PxViewer.Models;
@@ -12,5 +13,7 @@ namespace PxViewer.ViewModels
         public string ThumbnailPath { get; set; } = "";
 
         public ImageSource PreviewSource { get; set; }
+
+        public string FileName => Path.GetFileName(Entry.FullPath);
     }
 }
