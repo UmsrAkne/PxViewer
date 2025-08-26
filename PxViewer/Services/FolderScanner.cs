@@ -6,7 +6,7 @@ using PxViewer.Models;
 
 namespace PxViewer.Services
 {
-    public class FolderScanner
+    public class FolderScanner : IFolderScanner
     {
         // ReSharper disable once ArrangeModifiersOrder
         private static readonly HashSet<string> SupportedExtensions = new (StringComparer.OrdinalIgnoreCase)
@@ -14,7 +14,7 @@ namespace PxViewer.Services
             ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp", ".tiff",
         };
 
-        public IReadOnlyList<ImageEntry> ScanAsync(
+        public IReadOnlyList<ImageEntry> Scan(
             string folderPath,
             CancellationToken ct = default)
         {
