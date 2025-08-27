@@ -1,14 +1,17 @@
-﻿using Prism.Mvvm;
+﻿using System.Collections.ObjectModel;
+using Prism.Mvvm;
+using PxViewer.Utils;
 
-namespace PxViewer.ViewModels;
-
-public class MainWindowViewModel : BindableBase
+namespace PxViewer.ViewModels
 {
-    private string _title = "Prism Application";
-
-    public string Title
+    public class MainWindowViewModel : BindableBase, IMainWindowVm
     {
-        get => _title;
-        set => SetProperty(ref _title, value);
+        private readonly AppVersionInfo appVersionInfo = new ();
+
+        public string Title => appVersionInfo.GetAppNameWithVersion();
+
+        public ObservableCollection<TabViewModel> Tabs { get; } = new ();
+
+        public TabViewModel CurrentTab { get; set; }
     }
 }

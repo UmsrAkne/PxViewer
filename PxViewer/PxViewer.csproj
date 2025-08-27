@@ -3,6 +3,9 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
         <UseWPF>true</UseWPF>
+        <AssemblyVersion>0.0.0</AssemblyVersion>
+        <FileVersion>0.0.0</FileVersion>
+        <InformationalVersion>0.0.0</InformationalVersion>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
