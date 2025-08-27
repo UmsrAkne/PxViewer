@@ -1,9 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using Prism.Ioc;
 using Prism.Mvvm;
-using PxViewer.Models;
 using PxViewer.ViewModels;
 using PxViewer.Views;
 
@@ -16,32 +13,7 @@ namespace PxViewer
     {
         protected override Window CreateShell()
         {
-            var shell = Container.Resolve<MainWindow>();
-
-            #if DEBUG
-            // デバッグ用のテストデータを MainWindowViewModel に注入する。
-            try
-            {
-                var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-                var imagesDir = Path.Combine(
-                    home, "tests", "RiderProjects", "PxViewer", "images");
-
-                if (Directory.Exists(imagesDir) && shell.DataContext is IMainWindowVm vm)
-                {
-                    var tab = new TabViewModel(new FolderId(imagesDir));
-                    vm.Tabs.Add(tab);
-                    vm.CurrentTab = tab;
-                    vm.CurrentTab.LoadFilesCommand.Execute();
-                }
-            }
-            catch
-            {
-                /* デバッグ補助なので失敗しても無視 */
-            }
-            #endif
-
-            return shell;
+            return Container.Resolve<MainWindow>();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
