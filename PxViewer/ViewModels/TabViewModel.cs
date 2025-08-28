@@ -55,6 +55,8 @@ namespace PxViewer.ViewModels
             var dispatcher = Application.Current.Dispatcher;
             var batch = new List<ImageEntry>(256);
 
+            dispatcher.Invoke(() => Thumbnails.Clear());
+
             await Task.Run(
             () =>
             {
