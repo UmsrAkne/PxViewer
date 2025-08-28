@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Prism.Commands;
+using CommunityToolkit.Mvvm.Input;
 using Prism.Mvvm;
 using PxViewer.Models;
 using PxViewer.Services;
@@ -37,10 +37,7 @@ namespace PxViewer.ViewModels
 
         public string Header { get => header; set => SetProperty(ref header, value); }
 
-        public DelegateCommand LoadFilesCommand => new DelegateCommand(() =>
-        {
-            _ = InitializeAsync();
-        });
+        public AsyncRelayCommand LoadFilesCommand => new (InitializeAsync);
 
         private IFolderScanner FolderScanner { get; set; }
 

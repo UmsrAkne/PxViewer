@@ -41,7 +41,7 @@ namespace PxViewer.ViewModels
             var tab = new TabViewModel(new FolderId(imagesDir));
             Tabs.Add(tab);
             CurrentTab = tab;
-            CurrentTab.LoadFilesCommand.Execute();
+            CurrentTab.LoadFilesCommand.Execute(null);
 
             Tabs.Add(new TabViewModel(new FolderId($"{imagesDir}_2")));
         }
