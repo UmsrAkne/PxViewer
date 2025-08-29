@@ -3,14 +3,17 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using CommunityToolkit.Mvvm.Input;
 using Prism.Mvvm;
 using PxViewer.Models;
+using PxViewer.Services;
 
 namespace PxViewer.ViewModels
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class DesignTimeMainWindowViewModel : BindableBase, IMainWindowVm
     {
+        private readonly TabService tabService = new ();
         private TabViewModel currentTab;
 
         public DesignTimeMainWindowViewModel()
@@ -29,6 +32,13 @@ namespace PxViewer.ViewModels
         public ObservableCollection<TabViewModel> Tabs { get; } = new ();
 
         public TabViewModel CurrentTab { get => currentTab; set => SetProperty(ref currentTab, value); }
+
+        public AsyncRelayCommand CreateNewTabCommandAsync => new (async () =>
+        {
+            var toAdd = await tabService.CreateAndLoadAsync(CurrentTab.Folder.Value);
+            Tabs.Add(toAdd);
+            CurrentTab = toAdd;
+        });
 
         [Conditional("DEBUG")]
         private void InjectDummies()

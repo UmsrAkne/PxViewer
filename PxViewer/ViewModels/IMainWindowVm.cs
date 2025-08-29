@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace PxViewer.ViewModels
 {
@@ -9,5 +10,7 @@ namespace PxViewer.ViewModels
         ObservableCollection<TabViewModel> Tabs { get; }
 
         TabViewModel CurrentTab { get; set; }
+
+        public AsyncRelayCommand CreateNewTabCommandAsync { get; }
     }
 }
