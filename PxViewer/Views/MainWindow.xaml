@@ -52,8 +52,8 @@
             </TabControl.ItemTemplate>
 
             <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding CurrentTab.Folder.Value}" />
+                <DataTemplate DataType="{x:Type viewModels:TabViewModel}">
+                    <TextBlock Text="{Binding Folder.Value}" />
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
