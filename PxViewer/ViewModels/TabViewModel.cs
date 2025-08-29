@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using CommunityToolkit.Mvvm.Input;
 using Prism.Mvvm;
 using PxViewer.Models;
@@ -19,15 +20,17 @@ namespace PxViewer.ViewModels
     {
         private readonly CancellationTokenSource cts = new();
         private string header;
+        private string address;
 
         public TabViewModel(FolderId folder)
         {
             Folder = folder;
+            Address = folder.Value;
             Header = Path.GetFileName(folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
             FolderScanner = new FolderScanner();
         }
 
-        public FolderId Folder { get; }
+        public FolderId Folder { get; private set; }
 
         public ObservableCollection<ImageItemViewModel> Thumbnails { get; } = new ();
 
@@ -37,7 +40,21 @@ namespace PxViewer.ViewModels
 
         public string Header { get => header; set => SetProperty(ref header, value); }
 
+        public string Address { get => address; set => SetProperty(ref address, value); }
+
         public AsyncRelayCommand LoadFilesCommand => new (InitializeAsync);
+
+        public AsyncRelayCommand ChangeDirectoryAsyncCommand => new AsyncRelayCommand(async () =>
+        {
+            if (string.IsNullOrWhiteSpace(Address) || !Directory.Exists(Address))
+            {
+                return;
+            }
+
+            Folder = new FolderId(Address);
+            Header = Path.GetFileName(Folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            await LoadFilesCommand.ExecuteAsync(null);
+        });
 
         private IFolderScanner FolderScanner { get; set; }
 

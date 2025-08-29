@@ -53,7 +53,13 @@
 
             <TabControl.ContentTemplate>
                 <DataTemplate DataType="{x:Type viewModels:TabViewModel}">
-                    <TextBlock Text="{Binding Folder.Value}" />
+                    <Border>
+                        <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding ChangeDirectoryAsyncCommand}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </Border>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
