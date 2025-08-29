@@ -14,6 +14,13 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 
+    <Window.InputBindings>
+        <KeyBinding
+            Key="T"
+            Command="{Binding CreateNewTabCommandAsync}"
+            Modifiers="Control" />
+    </Window.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <!--  タブ  -->
@@ -45,8 +52,14 @@
             </TabControl.ItemTemplate>
 
             <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding CurrentTab.Folder.Value}" />
+                <DataTemplate DataType="{x:Type viewModels:TabViewModel}">
+                    <Border>
+                        <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding ChangeDirectoryAsyncCommand}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </Border>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
