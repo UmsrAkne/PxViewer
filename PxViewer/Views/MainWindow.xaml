@@ -108,7 +108,7 @@
                 Grid.Column="1"
                 Padding="8"
                 Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-                <Image Source="{Binding CurrentTab.SelectedItem.Entry.FullPath}" Stretch="Uniform" />
+                <Image Source="{Binding CurrentTab.SelectedItem.Entry.FullPath, Converter={StaticResource PreviewImageConverter}}" Stretch="Uniform" />
             </Border>
         </Grid>
 
