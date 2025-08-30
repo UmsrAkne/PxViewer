@@ -1,14 +1,13 @@
-﻿using System.Windows;
-
-namespace PxViewer.Views;
-
-/// <summary>
-///     Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window
+﻿namespace PxViewer.Views
 {
-    public MainWindow()
+    /// <summary>
+    ///     Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow
     {
-        InitializeComponent();
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
     }
 }

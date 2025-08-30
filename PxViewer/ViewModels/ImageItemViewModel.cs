@@ -10,7 +10,7 @@ namespace PxViewer.ViewModels
     {
         public ImageEntry Entry { get; set; }
 
-        public string ThumbnailPath { get; set; } = "";
+        public string ThumbnailPath { get; set; } = string.Empty;
 
         public ImageSource PreviewSource { get; set; }
 
