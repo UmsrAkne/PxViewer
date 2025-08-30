@@ -20,6 +20,7 @@ namespace PxViewer.ViewModels
         private readonly CancellationTokenSource cts = new();
         private string header;
         private string address;
+        private ImageItemViewModel selectedItem;
 
         public TabViewModel(FolderId folder)
         {
@@ -33,7 +34,11 @@ namespace PxViewer.ViewModels
 
         public ObservableCollection<ImageItemViewModel> Thumbnails { get; } = new ();
 
-        public ImageItemViewModel SelectedItem { get; set; }
+        public ImageItemViewModel SelectedItem
+        {
+            get => selectedItem;
+            set => SetProperty(ref selectedItem, value);
+        }
 
         public object SelectedItemMeta { get; set; }
 
