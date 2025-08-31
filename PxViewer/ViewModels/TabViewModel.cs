@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using CommunityToolkit.Mvvm.Input;
 using Prism.Mvvm;
 using PxViewer.Models;
@@ -21,6 +20,7 @@ namespace PxViewer.ViewModels
         private readonly CancellationTokenSource cts = new();
         private string header;
         private string address;
+        private ImageItemViewModel selectedItem;
 
         public TabViewModel(FolderId folder)
         {
@@ -34,9 +34,13 @@ namespace PxViewer.ViewModels
 
         public ObservableCollection<ImageItemViewModel> Thumbnails { get; } = new ();
 
-        public ImageItemViewModel? SelectedItem { get; set; }
+        public ImageItemViewModel SelectedItem
+        {
+            get => selectedItem;
+            set => SetProperty(ref selectedItem, value);
+        }
 
-        public object? SelectedItemMeta { get; set; }
+        public object SelectedItemMeta { get; set; }
 
         public string Header { get => header; set => SetProperty(ref header, value); }
 
@@ -62,6 +66,11 @@ namespace PxViewer.ViewModels
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            cts.Dispose();
         }
 
         private async Task InitializeAsync()
@@ -93,11 +102,6 @@ namespace PxViewer.ViewModels
                 var toAdd = batch.Select(i => new ImageItemViewModel { Entry = i, });
                 await Application.Current.Dispatcher.InvokeAsync(() => Thumbnails.AddRange(toAdd));
             }
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            cts.Dispose();
         }
     }
 }
