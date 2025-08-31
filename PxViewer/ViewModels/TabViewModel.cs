@@ -39,7 +39,12 @@ namespace PxViewer.ViewModels
             get => selectedItem;
             set
             {
-                selectedItem?.CancelLoad();
+                if (selectedItem != null)
+                {
+                    selectedItem.CancelLoad();
+                    selectedItem.ReleaseImage();
+                }
+
                 if (SetProperty(ref selectedItem, value))
                 {
                     _ = selectedItem?.LoadAsync(previewMax: 800);

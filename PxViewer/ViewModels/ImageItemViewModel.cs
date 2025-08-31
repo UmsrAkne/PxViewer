@@ -69,6 +69,11 @@ namespace PxViewer.ViewModels
             Image = full;
         }
 
+        public void ReleaseImage()
+        {
+            Image = null;
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             loadCts.Dispose();
