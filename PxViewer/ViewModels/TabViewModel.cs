@@ -37,7 +37,20 @@ namespace PxViewer.ViewModels
         public ImageItemViewModel SelectedItem
         {
             get => selectedItem;
-            set => SetProperty(ref selectedItem, value);
+            set
+            {
+                if (selectedItem != null)
+                {
+                    selectedItem.CancelLoad();
+                    selectedItem.ReleaseImage();
+                }
+
+                if (SetProperty(ref selectedItem, value))
+                {
+                    _ = selectedItem?.LoadAsync(previewMax: 800);
+                    selectedItem = value;
+                }
+            }
         }
 
         public object SelectedItemMeta { get; set; }
