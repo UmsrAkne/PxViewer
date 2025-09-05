@@ -48,7 +48,6 @@ namespace PxViewer.ViewModels
                 if (SetProperty(ref selectedItem, value))
                 {
                     _ = selectedItem?.LoadAsync(previewMax: 800);
-                    _ = selectedItem?.LoadThumbnailAsync();
                     selectedItem = value;
                 }
             }
@@ -72,6 +71,11 @@ namespace PxViewer.ViewModels
             Folder = new FolderId(Address);
             Header = Path.GetFileName(Folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
             await LoadFilesCommand.ExecuteAsync(null);
+        });
+
+        public AsyncRelayCommand<ImageItemViewModel> LoadThumbnailsAsyncCommand => new (async item =>
+        {
+            await item.LoadThumbnailAsync();
         });
 
         private IFolderScanner FolderScanner { get; set; }
