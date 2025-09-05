@@ -2,8 +2,10 @@
     x:Class="PxViewer.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:PxViewer.Converters"
     xmlns:prism="http://prismlibrary.com/">
     <Application.Resources>
         <SolidColorBrush x:Key="BgBrush" Color="AliceBlue" />
+        <converters:PathToBitmapImageConverter x:Key="PathToBitmapImageConverter" />
     </Application.Resources>
 </prism:PrismApplication>

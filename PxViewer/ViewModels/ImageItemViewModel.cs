@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Prism.Mvvm;
 using PxViewer.Models;
+using PxViewer.Services;
 
 namespace PxViewer.ViewModels
 {
@@ -15,10 +16,15 @@ namespace PxViewer.ViewModels
     {
         private ImageSource image;
         private CancellationTokenSource loadCts;
+        private string thumbnailPath = string.Empty;
 
         public ImageEntry Entry { get; init; }
 
-        public string ThumbnailPath { get; set; } = string.Empty;
+        public string ThumbnailPath
+        {
+            get => thumbnailPath;
+            set => SetProperty(ref thumbnailPath, value);
+        }
 
         public ImageSource PreviewSource { get; set; }
 
@@ -37,6 +43,38 @@ namespace PxViewer.ViewModels
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task LoadThumbnailAsync(int maxWidth = 256)
+        {
+            loadCts = new CancellationTokenSource();
+            var baseDir = Directory.CreateDirectory("thumbnails");
+
+            var thumbPath = ThumbnailHelper.GetThumbnailCachePath(
+                ThumbnailHelper.GenerateThumbnailHash(Entry.FullPath),
+                baseDir.FullName);
+
+            if (string.IsNullOrWhiteSpace(thumbPath))
+            {
+                System.Diagnostics.Debug.WriteLine($"サムネイルパスの取得に失敗しました。(ImageItemViewModel : 59)");
+                return;
+            }
+
+            if (File.Exists(thumbPath))
+            {
+                ThumbnailPath = thumbPath;
+                return;
+            }
+
+            var thumbnail = await Task.Run(() => LoadBitmap(Entry.FullPath, maxWidth));
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(thumbnail));
+            await using (var stream = new FileStream(thumbPath, FileMode.Create))
+            {
+                encoder.Save(stream);
+            }
+
+            ThumbnailPath = thumbPath;
         }
 
         public async Task LoadAsync(int previewMax = 800, bool alsoLoadFull = true)

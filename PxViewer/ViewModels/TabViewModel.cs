@@ -73,6 +73,11 @@ namespace PxViewer.ViewModels
             await LoadFilesCommand.ExecuteAsync(null);
         });
 
+        public AsyncRelayCommand<ImageItemViewModel> LoadThumbnailsAsyncCommand => new (async item =>
+        {
+            await item.LoadThumbnailAsync();
+        });
+
         private IFolderScanner FolderScanner { get; set; }
 
         public void Dispose()

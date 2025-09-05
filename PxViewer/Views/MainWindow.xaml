@@ -89,12 +89,16 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-
                             <Border Margin="2" Padding="4">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Loaded">
+                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.CurrentTab.LoadThumbnailsAsyncCommand}" CommandParameter="{Binding}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
                                 <Image
-                                    Width="296"
+                                    Width="200"
                                     Height="auto"
-                                    Source="{Binding ThumbnailPath}"
+                                    Source="{Binding ThumbnailPath, Converter={StaticResource PathToBitmapImageConverter}}"
                                     Stretch="Uniform" />
                             </Border>
                             <TextBlock Text="{Binding FileName}" />
