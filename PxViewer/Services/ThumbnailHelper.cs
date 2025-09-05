@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -29,6 +30,23 @@ namespace PxViewer.Services
             }
 
             return sb.ToString()[..32];
+        }
+
+        public static string GetThumbnailCachePath(string hash, string baseDir)
+        {
+            if (hash.Length < 4)
+            {
+                throw new ArgumentException("Hash is too short", nameof(hash));
+            }
+
+            var dir1 = hash.Substring(0, 2);
+            var dir2 = hash.Substring(2, 2);
+            var finalDir = Path.Combine(baseDir, dir1, dir2);
+
+            // フォルダなければ作成
+            Directory.CreateDirectory(finalDir);
+
+            return Path.Combine(finalDir, $"{hash}.png");
         }
     }
 }
