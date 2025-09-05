@@ -60,15 +60,13 @@ namespace PxViewer.ViewModels
                 return;
             }
 
-            var ct = loadCts.Token;
-
             if (File.Exists(thumbPath))
             {
                 ThumbnailPath = thumbPath;
                 return;
             }
 
-            var thumbnail = await Task.Run(() => LoadBitmap(Entry.FullPath, maxWidth), ct);
+            var thumbnail = await Task.Run(() => LoadBitmap(Entry.FullPath, maxWidth));
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(thumbnail));
             await using (var stream = new FileStream(thumbPath, FileMode.Create))
