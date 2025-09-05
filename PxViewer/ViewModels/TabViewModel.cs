@@ -48,6 +48,7 @@ namespace PxViewer.ViewModels
                 if (SetProperty(ref selectedItem, value))
                 {
                     _ = selectedItem?.LoadAsync(previewMax: 800);
+                    _ = selectedItem?.LoadThumbnailAsync();
                     selectedItem = value;
                 }
             }

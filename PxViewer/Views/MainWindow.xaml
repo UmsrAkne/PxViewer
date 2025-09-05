@@ -92,7 +92,7 @@
 
                             <Border Margin="2" Padding="4">
                                 <Image
-                                    Width="296"
+                                    Width="200"
                                     Height="auto"
                                     Source="{Binding ThumbnailPath}"
                                     Stretch="Uniform" />

@@ -15,10 +15,15 @@ namespace PxViewer.ViewModels
     {
         private ImageSource image;
         private CancellationTokenSource loadCts;
+        private string thumbnailPath = string.Empty;
 
         public ImageEntry Entry { get; init; }
 
-        public string ThumbnailPath { get; set; } = string.Empty;
+        public string ThumbnailPath
+        {
+            get => thumbnailPath;
+            set => SetProperty(ref thumbnailPath, value);
+        }
 
         public ImageSource PreviewSource { get; set; }
 
@@ -37,6 +42,23 @@ namespace PxViewer.ViewModels
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task LoadThumbnailAsync(int maxWidth = 256)
+        {
+            loadCts = new CancellationTokenSource();
+            var dir = Directory.CreateDirectory("thumbnails");
+            var testThumbPath = Path.Combine(dir.FullName, FileName);
+            var ct = loadCts.Token;
+            var thumbnail = await Task.Run(() => LoadBitmap(Entry.FullPath, maxWidth), ct);
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(thumbnail));
+            await using (var stream = new FileStream(testThumbPath, FileMode.Create))
+            {
+                encoder.Save(stream);
+            }
+
+            ThumbnailPath = testThumbPath;
         }
 
         public async Task LoadAsync(int previewMax = 800, bool alsoLoadFull = true)
