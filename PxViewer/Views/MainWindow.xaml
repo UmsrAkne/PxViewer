@@ -98,7 +98,7 @@
                                 <Image
                                     Width="200"
                                     Height="auto"
-                                    Source="{Binding ThumbnailPath}"
+                                    Source="{Binding ThumbnailPath, Converter={StaticResource PathToBitmapImageConverter}}"
                                     Stretch="Uniform" />
                             </Border>
                             <TextBlock Text="{Binding FileName}" />
