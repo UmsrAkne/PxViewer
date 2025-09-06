@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using PxViewer.Models;
 
 namespace PxViewer.Services
 {
@@ -11,8 +8,6 @@ namespace PxViewer.Services
     // - 必要ならディスクに保存して再利用可能にする
     public interface IThumbnailService
     {
-        Task<IReadOnlyList<ImageEntry>> ScanAsync(string folderPath, CancellationToken ct = default);
-
         Task<string> GetOrCreateThumbnailPath(string imagePath);
     }
 }

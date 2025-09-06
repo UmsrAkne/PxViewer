@@ -1,20 +1,12 @@
-using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using PxViewer.Models;
 using PxViewer.Utils;
 
 namespace PxViewer.Services
 {
     public class ThumbnailService : IThumbnailService
     {
-        public Task<IReadOnlyList<ImageEntry>> ScanAsync(string folderPath, CancellationToken ct = default)
-        {
-            throw new System.NotImplementedException();
-        }
-
         /// <summary>
         /// 入力された画像のサムネイルのパスを取得します。
         /// 既存のサムネイルが存在する場合はそのパスを、存在しない場合は新規作成してそのパスを返します。
