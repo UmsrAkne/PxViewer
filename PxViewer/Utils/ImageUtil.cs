@@ -1,13 +1,15 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Media.Imaging;
 
 namespace PxViewer.Utils
 {
     public static class ImageUtil
     {
-        public static BitmapImage LoadBitmap(string path, int? maxWidth)
+        public static BitmapImage LoadBitmap(string path, int? maxWidth, CancellationToken ct = default)
         {
+            ct.ThrowIfCancellationRequested();
             if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
             {
                 return null;

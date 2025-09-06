@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Prism.Mvvm;
 using PxViewer.Models;
 using PxViewer.Services;
@@ -63,28 +64,25 @@ namespace PxViewer.ViewModels
             loadCts = new CancellationTokenSource();
             var ct = loadCts.Token;
 
-            // 1) 軽量プレビュー同期処理ですぐ表示
-            var preview = await Task.Run(() => ImageUtil.LoadBitmap(Entry.FullPath, previewMax), ct);
-            if (ct.IsCancellationRequested)
+            try
             {
-                return;
+                // 1) 軽量プレビューを非同期で読み込み
+                var preview = await Task.Run(() => ImageUtil.LoadBitmap(Entry.FullPath, previewMax, ct), ct);
+                Image = preview;
+
+                if (!alsoLoadFull)
+                {
+                    return;
+                }
+
+                // 2) フル解像度をさらに読み込み（まだ同じアイテムだったら）
+                var full = await Task.Run(() => ImageUtil.LoadBitmap(Entry.FullPath, null, ct), ct);
+                Image = full;
             }
-
-            Image = preview;
-
-            if (!alsoLoadFull)
+            catch (OperationCanceledException)
             {
-                return;
+                // キャンセルされても異常ではないため、特にメッセージは出さない。
             }
-
-            // 2) 裏でフル解像度まだ同じアイテムなら差し替え
-            var full = await Task.Run(() => ImageUtil.LoadBitmap(Entry.FullPath, null), ct);
-            if (ct.IsCancellationRequested)
-            {
-                return;
-            }
-
-            Image = full;
         }
 
         public void ReleaseImage()
