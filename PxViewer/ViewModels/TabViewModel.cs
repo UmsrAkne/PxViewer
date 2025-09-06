@@ -18,16 +18,18 @@ namespace PxViewer.ViewModels
     public class TabViewModel : BindableBase, IDisposable
     {
         private readonly CancellationTokenSource cts = new();
+        private readonly IThumbnailService thumbnailService;
         private string header;
         private string address;
         private ImageItemViewModel selectedItem;
 
-        public TabViewModel(FolderId folder)
+        public TabViewModel(FolderId folder, IThumbnailService thumbnailService)
         {
             Folder = folder;
             Address = folder.Value;
             Header = Path.GetFileName(folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
             FolderScanner = new FolderScanner();
+            this.thumbnailService = thumbnailService;
         }
 
         public FolderId Folder { get; private set; }
@@ -106,7 +108,7 @@ namespace PxViewer.ViewModels
                     batch.Add(e);
                     if (batch.Count >= 256)
                     {
-                        var toAdd = batch.Select(i => new ImageItemViewModel { Entry = i, });
+                        var toAdd = batch.Select(Selector);
                         batch.Clear();
                         dispatcher.Invoke(() => Thumbnails.AddRange(toAdd));
                     }
@@ -117,9 +119,11 @@ namespace PxViewer.ViewModels
 
             if (batch.Count > 0)
             {
-                var toAdd = batch.Select(i => new ImageItemViewModel { Entry = i, });
+                var toAdd = batch.Select(Selector);
                 await Application.Current.Dispatcher.InvokeAsync(() => Thumbnails.AddRange(toAdd));
             }
+
+            ImageItemViewModel Selector(ImageEntry i) => new (thumbnailService) { Entry = i, };
         }
     }
 }

@@ -14,13 +14,14 @@ namespace PxViewer.ViewModels
     public class DesignTimeMainWindowViewModel : BindableBase, IMainWindowVm
     {
         private readonly TabService tabService = new ();
+        private readonly IThumbnailService thumbnailService = new ThumbnailService();
         private TabViewModel currentTab;
 
         public DesignTimeMainWindowViewModel()
         {
-            Tabs.Add(new TabViewModel(new FolderId("testPath1")));
-            Tabs.Add(new TabViewModel(new FolderId("testPath2")));
-            Tabs.Add(new TabViewModel(new FolderId("testPath3")));
+            Tabs.Add(CreateTab("testPath1"));
+            Tabs.Add(CreateTab("testPath2"));
+            Tabs.Add(CreateTab("testPath3"));
 
             CurrentTab = Tabs.First();
 
@@ -40,6 +41,11 @@ namespace PxViewer.ViewModels
             CurrentTab = toAdd;
         });
 
+        private TabViewModel CreateTab(string path)
+        {
+            return new TabViewModel(new FolderId(path), thumbnailService);
+        }
+
         [Conditional("DEBUG")]
         private void InjectDummies()
         {
@@ -48,12 +54,12 @@ namespace PxViewer.ViewModels
             var imagesDir = Path.Combine(
                 home, "tests", "RiderProjects", "PxViewer", "images");
 
-            var tab = new TabViewModel(new FolderId(imagesDir));
+            var tab = CreateTab(imagesDir);
             Tabs.Add(tab);
             CurrentTab = tab;
             CurrentTab.LoadFilesCommand.Execute(null);
 
-            Tabs.Add(new TabViewModel(new FolderId($"{imagesDir}_2")));
+            Tabs.Add(CreateTab(imagesDir));
         }
     }
 }

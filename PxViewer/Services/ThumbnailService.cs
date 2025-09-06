@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using PxViewer.Models;
+using PxViewer.Utils;
 
 namespace PxViewer.Services
 {
@@ -31,7 +31,7 @@ namespace PxViewer.Services
 
             if (string.IsNullOrWhiteSpace(thumbPath))
             {
-                System.Diagnostics.Debug.WriteLine($"サムネイルパスの取得に失敗しました。(ImageItemViewModel : 59)");
+                System.Diagnostics.Debug.WriteLine($"サムネイルパスの取得に失敗しました。(ThumbnailService)");
                 return string.Empty;
             }
 
@@ -40,37 +40,13 @@ namespace PxViewer.Services
                 return thumbPath;
             }
 
-            var thumbnail = await Task.Run(() => LoadBitmap(imagePath, 256));
+            var thumbnail = await Task.Run(() => ImageUtil.LoadBitmap(imagePath, 256));
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(thumbnail));
             await using var stream = new FileStream(thumbPath, FileMode.Create);
             encoder.Save(stream);
 
             return thumbPath;
-        }
-
-        public BitmapImage LoadBitmap(string path, int? maxWidth)
-        {
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-            {
-                return null;
-            }
-
-            var bmp = new BitmapImage();
-            bmp.BeginInit();
-            bmp.CacheOption = BitmapCacheOption.OnLoad; // ファイルロック回避
-            bmp.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
-            bmp.UriSource = new Uri(path);
-            if (maxWidth.HasValue)
-            {
-                bmp.DecodePixelWidth = maxWidth.Value; // 引数に幅が指定されていれば縮小デコード
-            }
-
-            bmp.EndInit();
-            bmp.Freeze(); // 他スレッド安全
-
-            System.Diagnostics.Debug.WriteLine($"{maxWidth}　でファイルを読み込み(ImageItemViewModel : 97)");
-            return bmp;
         }
     }
 }
