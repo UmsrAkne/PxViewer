@@ -12,5 +12,7 @@ namespace PxViewer.Services
     public interface IThumbnailService
     {
         Task<IReadOnlyList<ImageEntry>> ScanAsync(string folderPath, CancellationToken ct = default);
+
+        Task<string> GetOrCreateThumbnailPath(string imagePath);
     }
 }
