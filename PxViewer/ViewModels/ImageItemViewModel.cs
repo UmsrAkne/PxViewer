@@ -6,6 +6,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Prism.Mvvm;
 using PxViewer.Models;
+using PxViewer.Services;
+using PxViewer.Utils;
 
 namespace PxViewer.ViewModels
 {
@@ -13,12 +15,23 @@ namespace PxViewer.ViewModels
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class ImageItemViewModel : BindableBase, IDisposable
     {
+        private readonly IThumbnailService thumbnailService;
         private ImageSource image;
         private CancellationTokenSource loadCts;
+        private string thumbnailPath = string.Empty;
+
+        public ImageItemViewModel(IThumbnailService thumbnailService)
+        {
+            this.thumbnailService = thumbnailService;
+        }
 
         public ImageEntry Entry { get; init; }
 
-        public string ThumbnailPath { get; set; } = string.Empty;
+        public string ThumbnailPath
+        {
+            get => thumbnailPath;
+            set => SetProperty(ref thumbnailPath, value);
+        }
 
         public ImageSource PreviewSource { get; set; }
 
@@ -39,34 +52,37 @@ namespace PxViewer.ViewModels
             GC.SuppressFinalize(this);
         }
 
+        public async Task LoadThumbnailAsync(int maxWidth = 256)
+        {
+            var path = await thumbnailService.GetOrCreateThumbnailPath(Entry.FullPath);
+            ThumbnailPath = path;
+        }
+
         public async Task LoadAsync(int previewMax = 800, bool alsoLoadFull = true)
         {
             CancelLoad();
             loadCts = new CancellationTokenSource();
             var ct = loadCts.Token;
 
-            // 1) 軽量プレビュー同期処理ですぐ表示
-            var preview = await Task.Run(() => LoadBitmap(Entry.FullPath, previewMax), ct);
-            if (ct.IsCancellationRequested)
+            try
             {
-                return;
+                // 1) 軽量プレビューを非同期で読み込み
+                var preview = await Task.Run(() => ImageUtil.LoadBitmap(Entry.FullPath, previewMax, ct), ct);
+                Image = preview;
+
+                if (!alsoLoadFull)
+                {
+                    return;
+                }
+
+                // 2) フル解像度をさらに読み込み（まだ同じアイテムだったら）
+                var full = await Task.Run(() => ImageUtil.LoadBitmap(Entry.FullPath, null, ct), ct);
+                Image = full;
             }
-
-            Image = preview;
-
-            if (!alsoLoadFull)
+            catch (OperationCanceledException)
             {
-                return;
+                // キャンセルされても異常ではないため、特にメッセージは出さない。
             }
-
-            // 2) 裏でフル解像度まだ同じアイテムなら差し替え
-            var full = await Task.Run(() => LoadBitmap(Entry.FullPath, null), ct);
-            if (ct.IsCancellationRequested)
-            {
-                return;
-            }
-
-            Image = full;
         }
 
         public void ReleaseImage()
@@ -77,30 +93,6 @@ namespace PxViewer.ViewModels
         protected virtual void Dispose(bool disposing)
         {
             loadCts.Dispose();
-        }
-
-        private static BitmapImage LoadBitmap(string path, int? maxWidth)
-        {
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-            {
-                return null;
-            }
-
-            var bmp = new BitmapImage();
-            bmp.BeginInit();
-            bmp.CacheOption = BitmapCacheOption.OnLoad; // ファイルロック回避
-            bmp.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
-            bmp.UriSource = new Uri(path);
-            if (maxWidth.HasValue)
-            {
-                bmp.DecodePixelWidth = maxWidth.Value; // 引数に幅が指定されていれば縮小デコード
-            }
-
-            bmp.EndInit();
-            bmp.Freeze(); // 他スレッド安全
-
-            System.Diagnostics.Debug.WriteLine($"{maxWidth}　でファイルを読み込み(ImageItemViewModel : 97)");
-            return bmp;
         }
     }
 }

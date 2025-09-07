@@ -15,7 +15,4 @@
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Converters\" />
-    </ItemGroup>
 </Project>
