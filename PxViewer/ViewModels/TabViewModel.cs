@@ -19,6 +19,7 @@ namespace PxViewer.ViewModels
     {
         private readonly CancellationTokenSource cts = new();
         private readonly IThumbnailService thumbnailService;
+        private readonly int cacheCapacity = 10;
         private string header;
         private string address;
         private ImageItemViewModel selectedItem;
@@ -41,17 +42,16 @@ namespace PxViewer.ViewModels
             get => selectedItem;
             set
             {
-                if (selectedItem != null)
+                var old = selectedItem;
+
+                if (!SetProperty(ref selectedItem, value))
                 {
-                    selectedItem.CancelLoad();
-                    selectedItem.ReleaseImage();
+                    return;
                 }
 
-                if (SetProperty(ref selectedItem, value))
-                {
-                    _ = selectedItem?.LoadAsync(previewMax: 800);
-                    selectedItem = value;
-                }
+                RememberOld(old);
+                _ = selectedItem?.LoadAsync(previewMax: 800);
+                selectedItem = value;
             }
         }
 
@@ -81,6 +81,8 @@ namespace PxViewer.ViewModels
         });
 
         private IFolderScanner FolderScanner { get; set; }
+
+        private Queue<ImageItemViewModel> PreviewHistory { get; set; } = new ();
 
         public void Dispose()
         {
@@ -124,6 +126,36 @@ namespace PxViewer.ViewModels
             }
 
             ImageItemViewModel Selector(ImageEntry i) => new (thumbnailService) { Entry = i, };
+        }
+
+        private void RememberOld(ImageItemViewModel item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            // すでに履歴にあるなら入れ直さない
+            if (PreviewHistory.Contains(item))
+            {
+                return;
+            }
+
+            PreviewHistory.Enqueue(item);
+
+            // 10件超えたら古い順に解放
+            while (PreviewHistory.Count > cacheCapacity)
+            {
+                var toRelease = PreviewHistory.Dequeue();
+
+                // 表示中のものを誤って解放しないようにする
+                if (toRelease == selectedItem)
+                {
+                    continue;
+                }
+
+                toRelease.ReleaseImage();
+            }
         }
     }
 }
