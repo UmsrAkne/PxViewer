@@ -77,6 +77,7 @@
             <!--  サムネ一覧  -->
             <ListBox
                 Grid.Column="0"
+                AlternationCount="2"
                 ItemsSource="{Binding CurrentTab.Thumbnails}"
                 ScrollViewer.CanContentScroll="True"
                 SelectedItem="{Binding CurrentTab.SelectedItem}">
@@ -101,10 +102,19 @@
                                     Source="{Binding ThumbnailPath, Converter={StaticResource PathToBitmapImageConverter}}"
                                     Stretch="Uniform" />
                             </Border>
-                            <TextBlock Text="{Binding FileName}" />
+                            <TextBlock Margin="6,0,0,6" Text="{Binding FileName}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Style.Triggers>
+                            <Trigger Property="ListBox.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="LightBlue" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
 
             <!--  プレビュー  -->
