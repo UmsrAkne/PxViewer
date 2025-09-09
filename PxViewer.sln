@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PxViewer", "PxViewer\PxViewer.csproj", "{899295B2-B78C-432D-AA32-17F3C5A09D08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PxFeeder", "PxFeeder\PxFeeder.csproj", "{60AE7396-7A54-4FBB-98D4-9114455A95F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{899295B2-B78C-432D-AA32-17F3C5A09D08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{899295B2-B78C-432D-AA32-17F3C5A09D08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{899295B2-B78C-432D-AA32-17F3C5A09D08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60AE7396-7A54-4FBB-98D4-9114455A95F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60AE7396-7A54-4FBB-98D4-9114455A95F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60AE7396-7A54-4FBB-98D4-9114455A95F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60AE7396-7A54-4FBB-98D4-9114455A95F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
