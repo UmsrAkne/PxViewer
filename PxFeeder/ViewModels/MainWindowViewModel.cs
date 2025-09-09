@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace PxFeeder.ViewModels
@@ -71,6 +73,15 @@ namespace PxFeeder.ViewModels
                 cts = null;
             }
         }
+
+        public DelegateCommand OpenExplorerCommand => new DelegateCommand(() =>
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = DestDirectoryPath,
+                UseShellExecute = true,
+            });
+        });
 
         private void Stop()
         {

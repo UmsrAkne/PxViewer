@@ -39,6 +39,15 @@
             Grid.Row="3"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
+
+            <Button
+                Margin="10,0"
+                Padding="50,3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Command="{Binding OpenExplorerCommand}"
+                Content="Open in explorer" />
+
             <Button
                 Padding="50,3"
                 HorizontalAlignment="Right"
