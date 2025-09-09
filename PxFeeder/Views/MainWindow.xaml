@@ -8,11 +8,79 @@
     xmlns:viewModels="clr-namespace:PxFeeder.ViewModels"
     Title="{Binding Title}"
     Width="525"
-    Height="350"
+    Height="250"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
-    <Grid>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Source file path:" />
+            <TextBox Text="{Binding SourceFilePath, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Dest Directory path:" />
+            <TextBox Text="{Binding DestDirectoryPath, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2">
+            <TextBlock Text="Interval" />
+            <TextBox Text="{Binding IntervalSec, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="3"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Padding="50,3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Command="{Binding StartCommand}"
+                Content="start">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRunning}" Value="False">
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <Button
+                Margin="10,0"
+                Padding="50,3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Command="{Binding StopCommand}"
+                Content="stop">
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsRunning}" Value="False">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+        </StackPanel>
     </Grid>
 </Window>
