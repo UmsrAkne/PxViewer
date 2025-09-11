@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Prism.Mvvm;
 using PxViewer.Models;
 using PxViewer.Services;
+using PxViewer.Services.Events;
 
 namespace PxViewer.ViewModels
 {
@@ -39,6 +40,7 @@ namespace PxViewer.ViewModels
             if (directoryInfo.Exists)
             {
                 directoryWatcher.Watch(directoryInfo.FullName);
+                directoryWatcher.OnChanged += DirectoryWatcherOnOnChanged;
             }
         }
 
@@ -165,6 +167,29 @@ namespace PxViewer.ViewModels
 
                 toRelease.ReleaseImage();
             }
+        }
+
+        // ReSharper disable once AsyncVoidMethod
+        private async void DirectoryWatcherOnOnChanged(FileChangeEventArgs e)
+        {
+            if (e.ChangeType != "Created")
+            {
+                return;
+            }
+
+            // 重複チェック
+            if (Thumbnails.Any(x => x.Entry.FullPath == e.FullPath))
+            {
+                return;
+            }
+
+            var entry = new ImageEntry() { FullPath = e.FullPath, };
+            var item = new ImageItemViewModel(thumbnailService) { Entry = entry, };
+
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                Thumbnails.Add(item);
+            });
         }
     }
 }
