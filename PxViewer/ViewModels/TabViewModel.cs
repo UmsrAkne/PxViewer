@@ -104,6 +104,7 @@ namespace PxViewer.ViewModels
         protected virtual void Dispose(bool disposing)
         {
             cts.Dispose();
+            directoryWatcher.Dispose();
         }
 
         private async Task InitializeAsync()
