@@ -20,6 +20,7 @@ namespace PxViewer.ViewModels
         private readonly CancellationTokenSource cts = new();
         private readonly IThumbnailService thumbnailService;
         private readonly int cacheCapacity = 10;
+        private readonly DirectoryWatcher directoryWatcher;
         private string header;
         private string address;
         private ImageItemViewModel selectedItem;
@@ -31,6 +32,14 @@ namespace PxViewer.ViewModels
             Header = Path.GetFileName(folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
             FolderScanner = new FolderScanner();
             this.thumbnailService = thumbnailService;
+            directoryWatcher = new DirectoryWatcher();
+
+            var directoryInfo = new DirectoryInfo(Address);
+
+            if (directoryInfo.Exists)
+            {
+                directoryWatcher.Watch(directoryInfo.FullName);
+            }
         }
 
         public FolderId Folder { get; private set; }

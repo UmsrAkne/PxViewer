@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using PxViewer.Services.Events;
 
 namespace PxViewer.Services
 {
@@ -8,7 +9,7 @@ namespace PxViewer.Services
     {
         private FileSystemWatcher watcher;
 
-        public event Action<string> OnChanged;
+        public event Action<FileChangeEventArgs> OnChanged;
 
         public void Watch(string folderPath)
         {
@@ -47,7 +48,12 @@ namespace PxViewer.Services
                 return;
             }
 
-            OnChanged?.Invoke(e.FullPath);
+            Console.WriteLine($"Changed: {e.FullPath} ({e.ChangeType})"); // Todo:Remove
+            OnChanged?.Invoke(new FileChangeEventArgs
+            {
+                FullPath = e.FullPath,
+                ChangeType = e.ChangeType.ToString(),
+            });
         }
 
         private void OnRenamedInternal(object sender, RenamedEventArgs e)
@@ -57,7 +63,13 @@ namespace PxViewer.Services
                 return;
             }
 
-            OnChanged?.Invoke(e.FullPath);
+            Console.WriteLine($"Renamed: {e.FullPath}"); // Todo:Remove
+            OnChanged?.Invoke(new FileChangeEventArgs
+            {
+                FullPath = e.FullPath,
+                ChangeType = "Renamed",
+                OldPath = e.OldFullPath,
+            });
         }
 
         private bool IsSupportedImageExtension(string fullPath)
