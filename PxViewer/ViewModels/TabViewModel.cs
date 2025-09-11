@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Prism.Mvvm;
 using PxViewer.Models;
 using PxViewer.Services;
+using PxViewer.Services.Events;
 
 namespace PxViewer.ViewModels
 {
@@ -20,6 +21,7 @@ namespace PxViewer.ViewModels
         private readonly CancellationTokenSource cts = new();
         private readonly IThumbnailService thumbnailService;
         private readonly int cacheCapacity = 10;
+        private readonly DirectoryWatcher directoryWatcher;
         private string header;
         private string address;
         private ImageItemViewModel selectedItem;
@@ -31,6 +33,15 @@ namespace PxViewer.ViewModels
             Header = Path.GetFileName(folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
             FolderScanner = new FolderScanner();
             this.thumbnailService = thumbnailService;
+            directoryWatcher = new DirectoryWatcher();
+
+            var directoryInfo = new DirectoryInfo(Address);
+
+            if (directoryInfo.Exists)
+            {
+                directoryWatcher.Watch(directoryInfo.FullName);
+                directoryWatcher.OnChanged += DirectoryWatcherOnOnChanged;
+            }
         }
 
         public FolderId Folder { get; private set; }
@@ -93,6 +104,7 @@ namespace PxViewer.ViewModels
         protected virtual void Dispose(bool disposing)
         {
             cts.Dispose();
+            directoryWatcher.Dispose();
         }
 
         private async Task InitializeAsync()
@@ -156,6 +168,29 @@ namespace PxViewer.ViewModels
 
                 toRelease.ReleaseImage();
             }
+        }
+
+        // ReSharper disable once AsyncVoidMethod
+        private async void DirectoryWatcherOnOnChanged(FileChangeEventArgs e)
+        {
+            if (e.ChangeType != "Created")
+            {
+                return;
+            }
+
+            // 重複チェック
+            if (Thumbnails.Any(x => x.Entry.FullPath == e.FullPath))
+            {
+                return;
+            }
+
+            var entry = new ImageEntry() { FullPath = e.FullPath, };
+            var item = new ImageItemViewModel(thumbnailService) { Entry = entry, };
+
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                Thumbnails.Add(item);
+            });
         }
     }
 }
