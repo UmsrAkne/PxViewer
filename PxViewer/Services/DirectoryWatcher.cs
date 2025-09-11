@@ -48,7 +48,6 @@ namespace PxViewer.Services
                 return;
             }
 
-            Console.WriteLine($"Changed: {e.FullPath} ({e.ChangeType})"); // Todo:Remove
             OnChanged?.Invoke(new FileChangeEventArgs
             {
                 FullPath = e.FullPath,
@@ -63,7 +62,6 @@ namespace PxViewer.Services
                 return;
             }
 
-            Console.WriteLine($"Renamed: {e.FullPath}"); // Todo:Remove
             OnChanged?.Invoke(new FileChangeEventArgs
             {
                 FullPath = e.FullPath,
