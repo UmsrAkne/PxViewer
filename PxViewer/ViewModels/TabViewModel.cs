@@ -173,7 +173,7 @@ namespace PxViewer.ViewModels
         // ReSharper disable once AsyncVoidMethod
         private async void DirectoryWatcherOnOnChanged(FileChangeEventArgs e)
         {
-            if (e.ChangeType != "Created")
+            if (e.ChangeType != FileEventType.Create)
             {
                 return;
             }
