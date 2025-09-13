@@ -180,19 +180,7 @@ namespace PxViewer.ViewModels
                 return;
             }
 
-            // 重複チェック
-            if (ImageItemListViewModel.ImageItems.Any(x => x.Entry.FullPath == e.FullPath))
-            {
-                return;
-            }
-
-            var entry = new ImageEntry() { FullPath = e.FullPath, };
-            var item = new ImageItemViewModel(thumbnailService) { Entry = entry, };
-
-            await Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                ImageItemListViewModel.ImageItems.Add(item);
-            });
+            await ImageItemListViewModel.CreateImageItem(e.FullPath);
         }
     }
 }

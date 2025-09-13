@@ -1,5 +1,9 @@
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using Prism.Mvvm;
+using PxViewer.Models;
 using PxViewer.Services;
 
 namespace PxViewer.ViewModels
@@ -15,5 +19,22 @@ namespace PxViewer.ViewModels
         }
 
         public ObservableCollection<ImageItemViewModel> ImageItems { get; } = new ();
+
+        public async Task CreateImageItem(string fullPath)
+        {
+            // 重複チェック
+            if (ImageItems.Any(x => x.Entry.FullPath == fullPath))
+            {
+                return;
+            }
+
+            var entry = new ImageEntry() { FullPath = fullPath, };
+            var item = new ImageItemViewModel(thumbnailService) { Entry = entry, };
+
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                ImageItems.Add(item);
+            });
+        }
     }
 }
