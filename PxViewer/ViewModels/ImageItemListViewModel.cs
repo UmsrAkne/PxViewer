@@ -36,5 +36,17 @@ namespace PxViewer.ViewModels
                 ImageItems.Add(item);
             });
         }
+
+        public async Task RemoveImageItem(string fullPath)
+        {
+            var toRemove = ImageItems.FirstOrDefault(x => x.Entry.FullPath == fullPath);
+
+            if (toRemove == null)
+            {
+                return;
+            }
+
+            await Application.Current.Dispatcher.InvokeAsync(() => ImageItems.Remove(toRemove));
+        }
     }
 }

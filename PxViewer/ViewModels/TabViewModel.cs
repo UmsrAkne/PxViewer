@@ -175,12 +175,20 @@ namespace PxViewer.ViewModels
         // ReSharper disable once AsyncVoidMethod
         private async void DirectoryWatcherOnOnChanged(FileChangeEventArgs e)
         {
-            if (e.ChangeType != FileEventType.Create)
+            switch (e.ChangeType)
             {
-                return;
+                case FileEventType.Create:
+                    await ImageItemListViewModel.CreateImageItem(e.FullPath);
+                    break;
+                case FileEventType.Deletee:
+                    await ImageItemListViewModel.RemoveImageItem(e.FullPath);
+                    break;
+                case FileEventType.Update:
+                case FileEventType.Rename:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-
-            await ImageItemListViewModel.CreateImageItem(e.FullPath);
         }
     }
 }
