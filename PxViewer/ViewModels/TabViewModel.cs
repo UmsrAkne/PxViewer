@@ -42,11 +42,11 @@ namespace PxViewer.ViewModels
                 directoryWatcher.Watch(directoryInfo.FullName);
                 directoryWatcher.OnChanged += DirectoryWatcherOnOnChanged;
             }
+
+            ImageItemListViewModel = new ImageItemListViewModel(thumbnailService);
         }
 
         public FolderId Folder { get; private set; }
-
-        public ObservableCollection<ImageItemViewModel> Thumbnails { get; } = new ();
 
         public ImageItemViewModel SelectedItem
         {
@@ -71,6 +71,8 @@ namespace PxViewer.ViewModels
         public string Header { get => header; set => SetProperty(ref header, value); }
 
         public string Address { get => address; set => SetProperty(ref address, value); }
+
+        public ImageItemListViewModel ImageItemListViewModel { get; }
 
         public AsyncRelayCommand LoadFilesCommand => new (InitializeAsync);
 
@@ -112,7 +114,7 @@ namespace PxViewer.ViewModels
             var dispatcher = Application.Current.Dispatcher;
             var batch = new List<ImageEntry>(256);
 
-            dispatcher.Invoke(() => Thumbnails.Clear());
+            dispatcher.Invoke(() => ImageItemListViewModel.ImageItems.Clear());
 
             await Task.Run(
             () =>
@@ -124,7 +126,7 @@ namespace PxViewer.ViewModels
                     {
                         var toAdd = batch.Select(Selector);
                         batch.Clear();
-                        dispatcher.Invoke(() => Thumbnails.AddRange(toAdd));
+                        dispatcher.Invoke(() => ImageItemListViewModel.ImageItems.AddRange(toAdd));
                     }
 
                     cts.Token.ThrowIfCancellationRequested();
@@ -134,7 +136,7 @@ namespace PxViewer.ViewModels
             if (batch.Count > 0)
             {
                 var toAdd = batch.Select(Selector);
-                await Application.Current.Dispatcher.InvokeAsync(() => Thumbnails.AddRange(toAdd));
+                await Application.Current.Dispatcher.InvokeAsync(() => ImageItemListViewModel.ImageItems.AddRange(toAdd));
             }
 
             ImageItemViewModel Selector(ImageEntry i) => new (thumbnailService) { Entry = i, };
@@ -179,7 +181,7 @@ namespace PxViewer.ViewModels
             }
 
             // 重複チェック
-            if (Thumbnails.Any(x => x.Entry.FullPath == e.FullPath))
+            if (ImageItemListViewModel.ImageItems.Any(x => x.Entry.FullPath == e.FullPath))
             {
                 return;
             }
@@ -189,7 +191,7 @@ namespace PxViewer.ViewModels
 
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                Thumbnails.Add(item);
+                ImageItemListViewModel.ImageItems.Add(item);
             });
         }
     }
