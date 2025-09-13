@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -47,6 +48,32 @@ namespace PxViewer.ViewModels
             }
 
             await Application.Current.Dispatcher.InvokeAsync(() => ImageItems.Remove(toRemove));
+        }
+
+        public async Task UpdateImageItem(string fullPath)
+        {
+            var toUpdate = ImageItems.FirstOrDefault(x => x.Entry.FullPath == fullPath);
+            if (toUpdate == null)
+            {
+                return;
+            }
+
+            var fi = new FileInfo(fullPath);
+            if (!fi.Exists || fi.LastWriteTimeUtc == toUpdate.Entry.LastWriteUtc)
+            {
+                return;
+            }
+
+            var entry = new ImageEntry() { FullPath = fullPath, };
+            var item = new ImageItemViewModel(thumbnailService) { Entry = entry, };
+            await item.LoadThumbnailAsync();
+
+            var index = ImageItems.IndexOf(toUpdate);
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                ImageItems.RemoveAt(index);
+                ImageItems.Insert(index, item);
+            });
         }
     }
 }

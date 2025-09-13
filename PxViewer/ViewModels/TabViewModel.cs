@@ -180,10 +180,12 @@ namespace PxViewer.ViewModels
                 case FileEventType.Create:
                     await ImageItemListViewModel.CreateImageItem(e.FullPath);
                     break;
+                case FileEventType.Update:
+                    await ImageItemListViewModel.UpdateImageItem(e.FullPath);
+                    break;
                 case FileEventType.Deletee:
                     await ImageItemListViewModel.RemoveImageItem(e.FullPath);
                     break;
-                case FileEventType.Update:
                 case FileEventType.Rename:
                     break;
                 default:
