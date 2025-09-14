@@ -75,5 +75,32 @@ namespace PxViewer.ViewModels
                 ImageItems.Insert(index, item);
             });
         }
+
+        public async Task RenameImageItem(string oldPath, string newPath)
+        {
+            var toRename = ImageItems.FirstOrDefault(x => x.Entry.FullPath == oldPath);
+            if (toRename == null)
+            {
+                return;
+            }
+
+            var fin = new FileInfo(newPath);
+            if (!fin.Exists)
+            {
+                return;
+            }
+
+            var entry = new ImageEntry { FullPath = newPath, };
+            var newItem = new ImageItemViewModel(thumbnailService) { Entry = entry, };
+            await newItem.LoadThumbnailAsync();
+
+            // アイテムを置き換える
+            var index = ImageItems.IndexOf(toRename);
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                ImageItems.RemoveAt(index);
+                ImageItems.Insert(index, newItem);
+            });
+        }
     }
 }

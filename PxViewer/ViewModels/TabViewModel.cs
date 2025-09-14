@@ -187,6 +187,7 @@ namespace PxViewer.ViewModels
                     await ImageItemListViewModel.RemoveImageItem(e.FullPath);
                     break;
                 case FileEventType.Rename:
+                    await ImageItemListViewModel.RenameImageItem(e.OldPath, e.FullPath);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
