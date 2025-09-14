@@ -48,10 +48,17 @@ namespace PxViewer.Services
                 return;
             }
 
+            var changeType = e.ChangeType.ToString() switch
+            {
+                "Created" => FileEventType.Create,
+                "Deleted" => FileEventType.Deletee,
+                _ => FileEventType.Update,
+            };
+
             OnChanged?.Invoke(new FileChangeEventArgs
             {
                 FullPath = e.FullPath,
-                ChangeType = e.ChangeType.ToString(),
+                ChangeType = changeType,
             });
         }
 
@@ -65,7 +72,7 @@ namespace PxViewer.Services
             OnChanged?.Invoke(new FileChangeEventArgs
             {
                 FullPath = e.FullPath,
-                ChangeType = "Renamed",
+                ChangeType = FileEventType.Rename,
                 OldPath = e.OldFullPath,
             });
         }

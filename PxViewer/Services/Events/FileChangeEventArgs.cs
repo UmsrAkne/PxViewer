@@ -6,6 +6,6 @@ namespace PxViewer.Services.Events
 
         public string? OldPath { get; set; } // Renamed時に使用
 
-        public string ChangeType { get; set; } // 変更の種類: Created, Deleted, Changed, Renamed
+        public FileEventType ChangeType { get; set; } // 変更の種類: Created, Deleted, Changed, Renamed
     }
 }
