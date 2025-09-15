@@ -37,13 +37,7 @@ namespace PxViewer.Services
 
                 var fi = new FileInfo(file);
 
-                results.Add(new ImageEntry
-                {
-                    Id = new ImageId(file.ToLowerInvariant()),
-                    FullPath = file,
-                    LastWriteUtc = fi.LastWriteTimeUtc,
-                    FileSize = fi.Length,
-                });
+                results.Add(ImageEntry.FromFile(fi.FullName));
             }
 
             return results;
