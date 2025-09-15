@@ -178,20 +178,67 @@ namespace PxViewer.ViewModels
             switch (e.ChangeType)
             {
                 case FileEventType.Create:
-                    await ImageItemListViewModel.CreateImageItem(e.FullPath);
+                    await TryAndRunAsync(
+                        e.FullPath,
+                        () => ImageItemListViewModel.CreateImageItem(e.FullPath));
+
                     break;
                 case FileEventType.Update:
-                    await ImageItemListViewModel.UpdateImageItem(e.FullPath);
+                    await TryAndRunAsync(
+                        e.FullPath,
+                        () => ImageItemListViewModel.UpdateImageItem(e.FullPath));
+
                     break;
                 case FileEventType.Deletee:
                     await ImageItemListViewModel.RemoveImageItem(e.FullPath);
                     break;
                 case FileEventType.Rename:
-                    await ImageItemListViewModel.RenameImageItem(e.OldPath, e.FullPath);
+                    await TryAndRunAsync(
+                        e.FullPath,
+                        () => ImageItemListViewModel.RenameImageItem(e.OldPath, e.FullPath));
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            return;
+
+            async Task TryAndRunAsync(string fullPath, Func<Task> onSuccess)
+            {
+                var fileInfo = await TryGetFileInfoWithRetryAsync(fullPath);
+                if (fileInfo != null)
+                {
+                    await onSuccess();
+                }
+            }
+        }
+
+        private async Task<FileInfo> TryGetFileInfoWithRetryAsync(string path, int maxAttempts = 5, int delayMs = 200)
+        {
+            for (var attempt = 1; attempt <= maxAttempts; attempt++)
+            {
+                try
+                {
+                    var fi = new FileInfo(path);
+                    await using var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+                    // ファイルにアクセスできたので return
+                    return fi;
+                }
+                catch (IOException)
+                {
+                    // 書き込み中の可能性あり、次のループで再試行
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // 他プロセスが握ってる可能性あり、次のループで再試行
+                }
+
+                await Task.Delay(delayMs);
+            }
+
+            return null; // 再試行してもアクセスできない場合は null を返す
         }
     }
 }
