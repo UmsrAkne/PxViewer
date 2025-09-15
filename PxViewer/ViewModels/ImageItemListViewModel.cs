@@ -29,8 +29,7 @@ namespace PxViewer.ViewModels
                 return;
             }
 
-            var entry = new ImageEntry() { FullPath = fullPath, };
-            var item = new ImageItemViewModel(thumbnailService) { Entry = entry, };
+            var item = CreateImageItemViewModel(fullPath);
 
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
@@ -64,8 +63,7 @@ namespace PxViewer.ViewModels
                 return;
             }
 
-            var entry = new ImageEntry() { FullPath = fullPath, };
-            var item = new ImageItemViewModel(thumbnailService) { Entry = entry, };
+            var item = CreateImageItemViewModel(fullPath);
             await item.LoadThumbnailAsync();
 
             var index = ImageItems.IndexOf(toUpdate);
@@ -90,8 +88,7 @@ namespace PxViewer.ViewModels
                 return;
             }
 
-            var entry = new ImageEntry { FullPath = newPath, };
-            var newItem = new ImageItemViewModel(thumbnailService) { Entry = entry, };
+            var newItem = CreateImageItemViewModel(newPath);
             await newItem.LoadThumbnailAsync();
 
             // アイテムを置き換える
@@ -101,6 +98,13 @@ namespace PxViewer.ViewModels
                 ImageItems.RemoveAt(index);
                 ImageItems.Insert(index, newItem);
             });
+        }
+
+        private ImageItemViewModel CreateImageItemViewModel(string fullPath)
+        {
+            var entry = ImageEntry.FromFile(fullPath);
+            var item = new ImageItemViewModel(thumbnailService) { Entry = entry, };
+            return item;
         }
     }
 }
