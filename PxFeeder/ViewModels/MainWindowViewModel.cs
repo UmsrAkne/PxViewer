@@ -12,6 +12,7 @@ namespace PxFeeder.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
+        private readonly string appName = "PxFeeder";
         private string title = "PxFeeder";
         private string sourceFilePath;
         private string destDirectoryPath;
@@ -40,7 +41,11 @@ namespace PxFeeder.ViewModels
         public bool IsRunning
         {
             get => isRunning;
-            set => SetProperty(ref isRunning, value);
+            set
+            {
+                SetProperty(ref isRunning, value);
+                Title = value ? $"{appName} (Running)" : $"{appName}";
+            }
         }
 
         private CancellationTokenSource cts;
