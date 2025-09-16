@@ -126,10 +126,27 @@
             </Border>
         </Grid>
 
-        <!--  メタデータ  -->
-        <ContentControl
-            Grid.Row="2"
-            Padding="8"
-            Content="{Binding CurrentTab.SelectedItemMeta}" />
+        <Grid Grid.Row="2" Margin="4">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  メタデータ  -->
+            <ContentControl Grid.Row="0" Content="{Binding CurrentTab.SelectedItemMeta}" />
+
+            <!--  画像の詳細情報を表示するステータスバー  -->
+            <StackPanel
+                Grid.Row="1"
+                Height="Auto"
+                Orientation="Horizontal">
+                <TextBlock Text="image name" />
+                <TextBlock Margin="10,0" Text="size :" />
+                <TextBlock Text="{Binding CurrentTab.SelectedItem.Entry.Width}" />
+                <TextBlock Margin="10,0" Text="x" />
+                <TextBlock Text="{Binding CurrentTab.SelectedItem.Entry.Height}" />
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </Window>
