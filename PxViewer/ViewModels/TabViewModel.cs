@@ -214,7 +214,7 @@ namespace PxViewer.ViewModels
             }
         }
 
-        private async Task<FileInfo> TryGetFileInfoWithRetryAsync(string path, int maxAttempts = 5, int delayMs = 200)
+        private async Task<FileInfo> TryGetFileInfoWithRetryAsync(string path, int maxAttempts = 5, int delayMs = 500)
         {
             for (var attempt = 1; attempt <= maxAttempts; attempt++)
             {
