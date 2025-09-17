@@ -124,7 +124,7 @@ namespace PxViewer.ViewModels
                     batch.Add(e);
                     if (batch.Count >= 256)
                     {
-                        var toAdd = batch.Select(Selector);
+                        var toAdd = batch.Select(Selector).ToList();
                         batch.Clear();
                         dispatcher.Invoke(() => ImageItemListViewModel.ImageItems.AddRange(toAdd));
                     }
