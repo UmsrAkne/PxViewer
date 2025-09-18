@@ -124,7 +124,7 @@ namespace PxViewer.ViewModels
                     batch.Add(e);
                     if (batch.Count >= 256)
                     {
-                        var toAdd = batch.Select(Selector);
+                        var toAdd = batch.Select(Selector).ToList();
                         batch.Clear();
                         dispatcher.Invoke(() => ImageItemListViewModel.ImageItems.AddRange(toAdd));
                     }
@@ -214,7 +214,7 @@ namespace PxViewer.ViewModels
             }
         }
 
-        private async Task<FileInfo> TryGetFileInfoWithRetryAsync(string path, int maxAttempts = 5, int delayMs = 200)
+        private async Task<FileInfo> TryGetFileInfoWithRetryAsync(string path, int maxAttempts = 5, int delayMs = 500)
         {
             for (var attempt = 1; attempt <= maxAttempts; attempt++)
             {
