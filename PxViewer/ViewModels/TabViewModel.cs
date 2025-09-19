@@ -93,6 +93,21 @@ namespace PxViewer.ViewModels
             await item.LoadThumbnailAsync();
         });
 
+        public AsyncRelayCommand<int?> RateImageAsyncCommand => new (rate =>
+        {
+            if (SelectedItem == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (rate.HasValue)
+            {
+                SelectedItem.Rating = (Rating)rate.Value;
+            }
+
+            return Task.CompletedTask;
+        });
+
         private IFolderScanner FolderScanner { get; set; }
 
         private Queue<ImageItemViewModel> PreviewHistory { get; set; } = new ();

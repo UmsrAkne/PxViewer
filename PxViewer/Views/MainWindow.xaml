@@ -6,6 +6,7 @@
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:PxViewer.ViewModels"
     Title="{Binding Title}"
     Width="1024"
@@ -81,6 +82,60 @@
                 ItemsSource="{Binding CurrentTab.ImageItemListViewModel.ImageItems}"
                 ScrollViewer.CanContentScroll="True"
                 SelectedItem="{Binding CurrentTab.SelectedItem}">
+                <ListBox.InputBindings>
+                    <KeyBinding
+                        Key="D0"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        Modifiers="Control">
+                        <KeyBinding.CommandParameter>
+                            <system:Int32>0</system:Int32>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
+
+                    <KeyBinding
+                        Key="D1"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        Modifiers="Control">
+                        <KeyBinding.CommandParameter>
+                            <system:Int32>1</system:Int32>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
+
+                    <KeyBinding
+                        Key="D2"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        Modifiers="Control">
+                        <KeyBinding.CommandParameter>
+                            <system:Int32>2</system:Int32>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
+
+                    <KeyBinding
+                        Key="D3"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        Modifiers="Control">
+                        <KeyBinding.CommandParameter>
+                            <system:Int32>3</system:Int32>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
+
+                    <KeyBinding
+                        Key="D4"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        Modifiers="Control">
+                        <KeyBinding.CommandParameter>
+                            <system:Int32>4</system:Int32>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
+                    <KeyBinding
+                        Key="D5"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        Modifiers="Control">
+                        <KeyBinding.CommandParameter>
+                            <system:Int32>5</system:Int32>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
+                </ListBox.InputBindings>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />

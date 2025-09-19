@@ -2,11 +2,14 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
+using Prism.Mvvm;
 
 namespace PxViewer.Models
 {
-    public class ImageEntry
+    public class ImageEntry : BindableBase
     {
+        private Rating rating;
+
         public ImageId Id { get; set; }
 
         public string FullPath { get; set; }
@@ -18,6 +21,12 @@ namespace PxViewer.Models
         public int Width { get; set; }
 
         public int Height { get; set; }
+
+        public Rating Rating
+        {
+            get => rating;
+            set => SetProperty(ref rating, value);
+        }
 
         public static ImageEntry FromFile(string path)
         {
