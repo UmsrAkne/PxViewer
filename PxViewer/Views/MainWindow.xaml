@@ -158,6 +158,7 @@
                                     Stretch="Uniform" />
                             </Border>
                             <TextBlock Margin="6,0,0,6" Text="{Binding FileName}" />
+                            <TextBlock Margin="6,0,0,6" Text="{Binding Rating, Converter={StaticResource RatingToStarsConverter}}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

@@ -44,8 +44,8 @@ namespace PxViewer.ViewModels
             get => Entry.Rating;
             set
             {
-                SetProperty(ref rating, value);
                 Entry.Rating = value;
+                SetProperty(ref rating, value);
             }
         }
 
