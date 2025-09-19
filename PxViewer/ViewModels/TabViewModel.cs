@@ -93,7 +93,7 @@ namespace PxViewer.ViewModels
             await item.LoadThumbnailAsync();
         });
 
-        public AsyncRelayCommand<int?> RateImageAsyncCommand => new (rate =>
+        public AsyncRelayCommand<Rating?> RateImageAsyncCommand => new (rate =>
         {
             if (SelectedItem == null)
             {
@@ -102,7 +102,7 @@ namespace PxViewer.ViewModels
 
             if (rate.HasValue)
             {
-                SelectedItem.Rating = (Rating)rate.Value;
+                SelectedItem.Rating = rate.Value;
             }
 
             return Task.CompletedTask;

@@ -5,8 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:PxViewer.Models"
     xmlns:prism="http://prismlibrary.com/"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:PxViewer.ViewModels"
     Title="{Binding Title}"
     Width="1024"
@@ -86,55 +86,38 @@
                     <KeyBinding
                         Key="D0"
                         Command="{Binding CurrentTab.RateImageAsyncCommand}"
-                        Modifiers="Control">
-                        <KeyBinding.CommandParameter>
-                            <system:Int32>0</system:Int32>
-                        </KeyBinding.CommandParameter>
-                    </KeyBinding>
+                        CommandParameter="{x:Static models:Rating.None}"
+                        Modifiers="Control" />
 
                     <KeyBinding
                         Key="D1"
                         Command="{Binding CurrentTab.RateImageAsyncCommand}"
-                        Modifiers="Control">
-                        <KeyBinding.CommandParameter>
-                            <system:Int32>1</system:Int32>
-                        </KeyBinding.CommandParameter>
-                    </KeyBinding>
+                        CommandParameter="{x:Static models:Rating.R1}"
+                        Modifiers="Control" />
 
                     <KeyBinding
                         Key="D2"
                         Command="{Binding CurrentTab.RateImageAsyncCommand}"
-                        Modifiers="Control">
-                        <KeyBinding.CommandParameter>
-                            <system:Int32>2</system:Int32>
-                        </KeyBinding.CommandParameter>
-                    </KeyBinding>
+                        CommandParameter="{x:Static models:Rating.R2}"
+                        Modifiers="Control" />
 
                     <KeyBinding
                         Key="D3"
                         Command="{Binding CurrentTab.RateImageAsyncCommand}"
-                        Modifiers="Control">
-                        <KeyBinding.CommandParameter>
-                            <system:Int32>3</system:Int32>
-                        </KeyBinding.CommandParameter>
-                    </KeyBinding>
+                        CommandParameter="{x:Static models:Rating.R3}"
+                        Modifiers="Control" />
 
                     <KeyBinding
                         Key="D4"
                         Command="{Binding CurrentTab.RateImageAsyncCommand}"
-                        Modifiers="Control">
-                        <KeyBinding.CommandParameter>
-                            <system:Int32>4</system:Int32>
-                        </KeyBinding.CommandParameter>
-                    </KeyBinding>
+                        CommandParameter="{x:Static models:Rating.R4}"
+                        Modifiers="Control" />
+
                     <KeyBinding
                         Key="D5"
                         Command="{Binding CurrentTab.RateImageAsyncCommand}"
-                        Modifiers="Control">
-                        <KeyBinding.CommandParameter>
-                            <system:Int32>5</system:Int32>
-                        </KeyBinding.CommandParameter>
-                    </KeyBinding>
+                        CommandParameter="{x:Static models:Rating.R5}"
+                        Modifiers="Control" />
                 </ListBox.InputBindings>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
