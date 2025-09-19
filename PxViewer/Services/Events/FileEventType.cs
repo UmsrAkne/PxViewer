@@ -6,7 +6,7 @@ namespace PxViewer.Services.Events
         Create,
         Update,
         Rename,
-        Deletee,
+        Delete,
         #pragma warning restore SA1602
     }
 }

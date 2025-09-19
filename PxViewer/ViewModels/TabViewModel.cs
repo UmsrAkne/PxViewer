@@ -189,7 +189,7 @@ namespace PxViewer.ViewModels
                         () => ImageItemListViewModel.UpdateImageItem(e.FullPath));
 
                     break;
-                case FileEventType.Deletee:
+                case FileEventType.Delete:
                     await ImageItemListViewModel.RemoveImageItem(e.FullPath);
                     break;
                 case FileEventType.Rename:
