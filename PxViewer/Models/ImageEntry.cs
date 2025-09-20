@@ -46,13 +46,10 @@ namespace PxViewer.Models
 
         private static Size GetImageDimensions(string path)
         {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.UriSource = new Uri(path);
-            bitmap.EndInit();
-
-            return new Size(bitmap.PixelWidth, bitmap.PixelHeight);
+            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.IgnoreColorProfile, BitmapCacheOption.None);
+            var frame = decoder.Frames[0];
+            return new Size(frame.PixelWidth, frame.PixelHeight);
         }
     }
 }
