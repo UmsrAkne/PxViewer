@@ -51,7 +51,7 @@ namespace PxViewer.Services
             var changeType = e.ChangeType.ToString() switch
             {
                 "Created" => FileEventType.Create,
-                "Deleted" => FileEventType.Deletee,
+                "Deleted" => FileEventType.Delete,
                 _ => FileEventType.Update,
             };
 

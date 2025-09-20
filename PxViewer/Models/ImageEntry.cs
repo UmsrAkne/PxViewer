@@ -2,11 +2,14 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
+using Prism.Mvvm;
 
 namespace PxViewer.Models
 {
-    public class ImageEntry
+    public class ImageEntry : BindableBase
     {
+        private Rating rating;
+
         public ImageId Id { get; set; }
 
         public string FullPath { get; set; }
@@ -18,6 +21,12 @@ namespace PxViewer.Models
         public int Width { get; set; }
 
         public int Height { get; set; }
+
+        public Rating Rating
+        {
+            get => rating;
+            set => SetProperty(ref rating, value);
+        }
 
         public static ImageEntry FromFile(string path)
         {
@@ -37,13 +46,10 @@ namespace PxViewer.Models
 
         private static Size GetImageDimensions(string path)
         {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.UriSource = new Uri(path);
-            bitmap.EndInit();
-
-            return new Size(bitmap.PixelWidth, bitmap.PixelHeight);
+            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.IgnoreColorProfile, BitmapCacheOption.None);
+            var frame = decoder.Frames[0];
+            return new Size(frame.PixelWidth, frame.PixelHeight);
         }
     }
 }

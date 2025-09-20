@@ -7,5 +7,6 @@
     <Application.Resources>
         <SolidColorBrush x:Key="BgBrush" Color="AliceBlue" />
         <converters:PathToBitmapImageConverter x:Key="PathToBitmapImageConverter" />
+        <converters:RatingToStarsConverter x:Key="RatingToStarsConverter" />
     </Application.Resources>
 </prism:PrismApplication>

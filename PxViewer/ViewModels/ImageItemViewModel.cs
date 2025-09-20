@@ -18,6 +18,7 @@ namespace PxViewer.ViewModels
         private ImageSource image;
         private CancellationTokenSource loadCts;
         private string thumbnailPath = string.Empty;
+        private Rating rating;
 
         public ImageItemViewModel(IThumbnailService thumbnailService)
         {
@@ -37,6 +38,16 @@ namespace PxViewer.ViewModels
         public string FileName => Path.GetFileName(Entry.FullPath);
 
         public ImageSource Image { get => image; private set => SetProperty(ref image, value); }
+
+        public Rating Rating
+        {
+            get => Entry.Rating;
+            set
+            {
+                Entry.Rating = value;
+                SetProperty(ref rating, value);
+            }
+        }
 
         public void CancelLoad()
         {

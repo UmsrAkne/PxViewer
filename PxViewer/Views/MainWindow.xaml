@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:PxViewer.Models"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewModels="clr-namespace:PxViewer.ViewModels"
     Title="{Binding Title}"
@@ -81,6 +82,43 @@
                 ItemsSource="{Binding CurrentTab.ImageItemListViewModel.ImageItems}"
                 ScrollViewer.CanContentScroll="True"
                 SelectedItem="{Binding CurrentTab.SelectedItem}">
+                <ListBox.InputBindings>
+                    <KeyBinding
+                        Key="D0"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        CommandParameter="{x:Static models:Rating.None}"
+                        Modifiers="Control" />
+
+                    <KeyBinding
+                        Key="D1"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        CommandParameter="{x:Static models:Rating.R1}"
+                        Modifiers="Control" />
+
+                    <KeyBinding
+                        Key="D2"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        CommandParameter="{x:Static models:Rating.R2}"
+                        Modifiers="Control" />
+
+                    <KeyBinding
+                        Key="D3"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        CommandParameter="{x:Static models:Rating.R3}"
+                        Modifiers="Control" />
+
+                    <KeyBinding
+                        Key="D4"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        CommandParameter="{x:Static models:Rating.R4}"
+                        Modifiers="Control" />
+
+                    <KeyBinding
+                        Key="D5"
+                        Command="{Binding CurrentTab.RateImageAsyncCommand}"
+                        CommandParameter="{x:Static models:Rating.R5}"
+                        Modifiers="Control" />
+                </ListBox.InputBindings>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />
@@ -103,6 +141,7 @@
                                     Stretch="Uniform" />
                             </Border>
                             <TextBlock Margin="6,0,0,6" Text="{Binding FileName}" />
+                            <TextBlock Margin="6,0,0,6" Text="{Binding Rating, Converter={StaticResource RatingToStarsConverter}}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

@@ -93,6 +93,21 @@ namespace PxViewer.ViewModels
             await item.LoadThumbnailAsync();
         });
 
+        public AsyncRelayCommand<Rating?> RateImageAsyncCommand => new (rate =>
+        {
+            if (SelectedItem == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (rate.HasValue)
+            {
+                SelectedItem.Rating = rate.Value;
+            }
+
+            return Task.CompletedTask;
+        });
+
         private IFolderScanner FolderScanner { get; set; }
 
         private Queue<ImageItemViewModel> PreviewHistory { get; set; } = new ();
@@ -189,7 +204,7 @@ namespace PxViewer.ViewModels
                         () => ImageItemListViewModel.UpdateImageItem(e.FullPath));
 
                     break;
-                case FileEventType.Deletee:
+                case FileEventType.Delete:
                     await ImageItemListViewModel.RemoveImageItem(e.FullPath);
                     break;
                 case FileEventType.Rename:
