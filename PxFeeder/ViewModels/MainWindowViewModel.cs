@@ -10,7 +10,8 @@ using Prism.Mvvm;
 
 namespace PxFeeder.ViewModels
 {
-    public class MainWindowViewModel : BindableBase
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public class MainWindowViewModel : BindableBase, IDisposable
     {
         private readonly string appName = "PxFeeder";
         private string title = "PxFeeder";
@@ -19,7 +20,7 @@ namespace PxFeeder.ViewModels
         private int intervalSec = 4;
         private bool isRunning;
 
-        public string Title { get => title; set => SetProperty(ref title, value); }
+        public string Title { get => title; private set => SetProperty(ref title, value); }
 
         public MainWindowViewModel()
         {
@@ -153,6 +154,17 @@ namespace PxFeeder.ViewModels
 
                 await Task.Delay(interval);
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            cts.Dispose();
         }
     }
 }
