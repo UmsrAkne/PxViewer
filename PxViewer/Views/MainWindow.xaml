@@ -135,8 +135,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                                 <Image
-                                    Width="200"
-                                    Height="auto"
+                                    MaxHeight="80"
                                     Source="{Binding ThumbnailPath, Converter={StaticResource PathToBitmapImageConverter}}"
                                     Stretch="Uniform" />
                             </Border>
@@ -179,10 +178,10 @@
                 Grid.Row="1"
                 Height="Auto"
                 Orientation="Horizontal">
-                <TextBlock Text="image name" />
+                <TextBlock Text="{Binding CurrentTab.SelectedItem.FileName}" />
                 <TextBlock Margin="10,0" Text="size :" />
                 <TextBlock Text="{Binding CurrentTab.SelectedItem.Entry.Width}" />
-                <TextBlock Margin="10,0" Text="x" />
+                <TextBlock Margin="5,0" Text="x" />
                 <TextBlock Text="{Binding CurrentTab.SelectedItem.Entry.Height}" />
             </StackPanel>
 
