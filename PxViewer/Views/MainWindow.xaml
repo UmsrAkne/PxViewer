@@ -135,8 +135,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                                 <Image
-                                    Width="200"
-                                    Height="auto"
+                                    MaxHeight="80"
                                     Source="{Binding ThumbnailPath, Converter={StaticResource PathToBitmapImageConverter}}"
                                     Stretch="Uniform" />
                             </Border>
@@ -172,17 +171,69 @@
             </Grid.RowDefinitions>
 
             <!--  メタデータ  -->
-            <ContentControl Grid.Row="0" Content="{Binding CurrentTab.SelectedItemMeta}" />
+            <ScrollViewer Grid.Row="0">
+                <ContentControl Content="{Binding CurrentTab.SelectedItemMeta}">
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate DataType="{x:Type models:PngGenerationMetadata}">
+                            <StackPanel Margin="8" Orientation="Vertical">
+
+                                <!--  Positive Prompts  -->
+                                <TextBlock FontWeight="Bold" Text="Positive Prompts:" />
+                                <ItemsControl ItemsSource="{Binding PositivePrompts}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Margin="8,0" Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+
+                                <!--  Negative Prompts  -->
+                                <TextBlock
+                                    Margin="0,8,0,0"
+                                    FontWeight="Bold"
+                                    Text="Negative Prompts:" />
+                                <ItemsControl ItemsSource="{Binding NegativePrompts}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Margin="8,0" Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+
+                                <!--  その他のプロパティ  -->
+                                <TextBlock Margin="0,8,0,0" Text="{Binding Steps, StringFormat=Steps: {0}}" />
+                                <TextBlock Text="{Binding Sampler, StringFormat=Sampler: {0}}" />
+                                <TextBlock Text="{Binding Seed, StringFormat=Seed: {0}}" />
+                                <TextBlock Text="{Binding ModelName, StringFormat=Model: {0}}" />
+                                <TextBlock Text="{Binding VaeName, StringFormat=VAE: {0}}" />
+                                <TextBlock Text="{Binding Version, StringFormat=Version: {0}}" />
+
+                            </StackPanel>
+                        </DataTemplate>
+
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
+            </ScrollViewer>
 
             <!--  画像の詳細情報を表示するステータスバー  -->
             <StackPanel
                 Grid.Row="1"
                 Height="Auto"
                 Orientation="Horizontal">
-                <TextBlock Text="image name" />
+                <TextBlock Text="{Binding CurrentTab.SelectedItem.FileName}" />
                 <TextBlock Margin="10,0" Text="size :" />
                 <TextBlock Text="{Binding CurrentTab.SelectedItem.Entry.Width}" />
-                <TextBlock Margin="10,0" Text="x" />
+                <TextBlock Margin="5,0" Text="x" />
                 <TextBlock Text="{Binding CurrentTab.SelectedItem.Entry.Height}" />
             </StackPanel>
 
