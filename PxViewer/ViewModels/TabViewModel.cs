@@ -26,7 +26,7 @@ namespace PxViewer.ViewModels
         private string header;
         private string address;
         private ImageItemViewModel selectedItem;
-        private object selectedItemMeta;
+        private PngGenerationMetadata selectedItemMeta;
 
         public TabViewModel(FolderId folder, IThumbnailService thumbnailService)
         {
@@ -65,11 +65,12 @@ namespace PxViewer.ViewModels
                 RememberOld(old);
                 _ = selectedItem?.LoadAsync(previewMax: 800);
                 selectedItem = value;
-                SelectedItemMeta = PngMetadataReader.ReadPngMetadata(selectedItem.Entry.FullPath);
+                var metaText = PngMetadataReader.ReadPngMetadata(selectedItem.Entry.FullPath);
+                SelectedItemMeta = PngMetadataReader.Parse(metaText);
             }
         }
 
-        public object SelectedItemMeta
+        public PngGenerationMetadata SelectedItemMeta
         {
             get => selectedItemMeta;
             set => SetProperty(ref selectedItemMeta, value);
