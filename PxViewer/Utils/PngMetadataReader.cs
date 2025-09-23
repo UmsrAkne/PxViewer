@@ -8,6 +8,11 @@ namespace PxViewer.Utils
     {
         public static string ReadPngMetadata(string filePath)
         {
+            if (!File.Exists(filePath))
+            {
+                return string.Empty;
+            }
+
             using var stream = File.OpenRead(filePath);
             using var reader = new BinaryReader(stream);
 

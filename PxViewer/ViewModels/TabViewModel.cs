@@ -11,6 +11,7 @@ using Prism.Mvvm;
 using PxViewer.Models;
 using PxViewer.Services;
 using PxViewer.Services.Events;
+using PxViewer.Utils;
 
 namespace PxViewer.ViewModels
 {
@@ -25,6 +26,7 @@ namespace PxViewer.ViewModels
         private string header;
         private string address;
         private ImageItemViewModel selectedItem;
+        private object selectedItemMeta;
 
         public TabViewModel(FolderId folder, IThumbnailService thumbnailService)
         {
@@ -63,10 +65,15 @@ namespace PxViewer.ViewModels
                 RememberOld(old);
                 _ = selectedItem?.LoadAsync(previewMax: 800);
                 selectedItem = value;
+                SelectedItemMeta = PngMetadataReader.ReadPngMetadata(selectedItem.Entry.FullPath);
             }
         }
 
-        public object SelectedItemMeta { get; set; }
+        public object SelectedItemMeta
+        {
+            get => selectedItemMeta;
+            set => SetProperty(ref selectedItemMeta, value);
+        }
 
         public string Header { get => header; set => SetProperty(ref header, value); }
 
