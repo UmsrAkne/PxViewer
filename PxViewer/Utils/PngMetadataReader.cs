@@ -7,7 +7,7 @@ using PxViewer.Models;
 
 namespace PxViewer.Utils
 {
-    public class PngMetadataReader
+    public static class PngMetadataReader
     {
         public static string ReadPngMetadata(string filePath)
         {
@@ -25,7 +25,6 @@ namespace PxViewer.Utils
 
             if (!signature.AsSpan().SequenceEqual(expectedSignature))
             {
-                Console.WriteLine("PNG signature mismatch.");
                 return string.Empty;
             }
 
@@ -53,7 +52,6 @@ namespace PxViewer.Utils
                     }
 
                     text = Encoding.UTF8.GetString(data);
-                    Console.WriteLine($"[{chunkType}] {text}");
                 }
                 catch (EndOfStreamException)
                 {
