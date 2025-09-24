@@ -65,6 +65,13 @@ namespace PxViewer.Utils
         public static PngGenerationMetadata Parse(string metadataText)
         {
             var meta = new PngGenerationMetadata();
+
+            if (!metadataText.StartsWith("parameters"))
+            {
+                meta.IsEmpty = true;
+                return meta;
+            }
+
             var lines = metadataText.Replace("\r", string.Empty).Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             var positiveBuffer = new List<string>();

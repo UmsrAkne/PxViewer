@@ -19,5 +19,7 @@ namespace PxViewer.Models
         public string VaeName { get; set; }
 
         public string Version { get; set; }
+
+        public bool IsEmpty { get; set; }
     }
 }
