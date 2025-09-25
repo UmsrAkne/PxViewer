@@ -102,10 +102,12 @@ namespace PxViewer.Utils
                 if (!isNegative)
                 {
                     positiveBuffer.AddRange(SplitPrompts(line));
+                    meta.RawPositive += line + Environment.NewLine;
                 }
                 else
                 {
                     negativeBuffer.AddRange(SplitPrompts(line));
+                    meta.RawNegative += line + Environment.NewLine;
                 }
             }
 
