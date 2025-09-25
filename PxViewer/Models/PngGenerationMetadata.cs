@@ -8,6 +8,10 @@ namespace PxViewer.Models
 
         public List<string> NegativePrompts { get; set; } = new ();
 
+        public string RawPositive { get; set; } = string.Empty;
+
+        public string RawNegative { get; set; } = string.Empty;
+
         public int Steps { get; set; }
 
         public string Sampler { get; set; }
@@ -19,5 +23,7 @@ namespace PxViewer.Models
         public string VaeName { get; set; }
 
         public string Version { get; set; }
+
+        public bool IsEmpty { get; set; }
     }
 }

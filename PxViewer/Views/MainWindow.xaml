@@ -173,6 +173,18 @@
             <!--  メタデータ  -->
             <ScrollViewer Grid.Row="0">
                 <ContentControl Content="{Binding CurrentTab.SelectedItemMeta}">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentTab.SelectedItemMeta.IsEmpty}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding CurrentTab.SelectedItemMeta.IsEmpty}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
                     <ContentControl.ContentTemplate>
                         <DataTemplate DataType="{x:Type models:PngGenerationMetadata}">
                             <StackPanel Margin="8" Orientation="Vertical">

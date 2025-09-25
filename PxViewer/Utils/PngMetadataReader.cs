@@ -7,7 +7,7 @@ using PxViewer.Models;
 
 namespace PxViewer.Utils
 {
-    public class PngMetadataReader
+    public static class PngMetadataReader
     {
         public static string ReadPngMetadata(string filePath)
         {
@@ -25,7 +25,6 @@ namespace PxViewer.Utils
 
             if (!signature.AsSpan().SequenceEqual(expectedSignature))
             {
-                Console.WriteLine("PNG signature mismatch.");
                 return string.Empty;
             }
 
@@ -53,7 +52,6 @@ namespace PxViewer.Utils
                     }
 
                     text = Encoding.UTF8.GetString(data);
-                    Console.WriteLine($"[{chunkType}] {text}");
                 }
                 catch (EndOfStreamException)
                 {
@@ -67,6 +65,13 @@ namespace PxViewer.Utils
         public static PngGenerationMetadata Parse(string metadataText)
         {
             var meta = new PngGenerationMetadata();
+
+            if (!metadataText.StartsWith("parameters"))
+            {
+                meta.IsEmpty = true;
+                return meta;
+            }
+
             var lines = metadataText.Replace("\r", string.Empty).Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             var positiveBuffer = new List<string>();
@@ -97,10 +102,12 @@ namespace PxViewer.Utils
                 if (!isNegative)
                 {
                     positiveBuffer.AddRange(SplitPrompts(line));
+                    meta.RawPositive += line + Environment.NewLine;
                 }
                 else
                 {
                     negativeBuffer.AddRange(SplitPrompts(line));
+                    meta.RawNegative += line + Environment.NewLine;
                 }
             }
 
