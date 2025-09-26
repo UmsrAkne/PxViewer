@@ -65,6 +65,12 @@ namespace PxViewer.ViewModels
                 RememberOld(old);
                 _ = selectedItem?.LoadAsync(previewMax: 800);
                 selectedItem = value;
+                if (selectedItem == null)
+                {
+                    SelectedItemMeta = new PngGenerationMetadata() { IsEmpty = true, };
+                    return;
+                }
+
                 var metaText = PngMetadataReader.ReadPngMetadata(selectedItem.Entry.FullPath);
                 SelectedItemMeta = PngMetadataReader.Parse(metaText);
             }
@@ -111,6 +117,7 @@ namespace PxViewer.ViewModels
             if (rate.HasValue)
             {
                 SelectedItem.Rating = rate.Value;
+                ImageItemListViewModel.FilteredView.Refresh();
             }
 
             return Task.CompletedTask;

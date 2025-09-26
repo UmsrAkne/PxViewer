@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using Prism.Mvvm;
 using PxViewer.Models;
 using PxViewer.Services;
@@ -17,9 +19,13 @@ namespace PxViewer.ViewModels
         public ImageItemListViewModel(IThumbnailService thumbnailService)
         {
             this.thumbnailService = thumbnailService;
+            FilteredView = CollectionViewSource.GetDefaultView(ImageItems);
+            FilteredView.Refresh();
         }
 
         public ObservableCollection<ImageItemViewModel> ImageItems { get; } = new ();
+
+        public ICollectionView FilteredView { get; set; }
 
         public async Task CreateImageItem(string fullPath)
         {
