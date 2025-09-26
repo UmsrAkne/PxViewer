@@ -103,8 +103,14 @@ namespace PxViewer.Utils
 
                 if (!isNegative)
                 {
-                    positiveBuffer.AddRange(SplitPrompts(line));
-                    positiveBuilder.AppendLine(line);
+                    var posLine = line;
+                    if (line.StartsWith("parameters", StringComparison.OrdinalIgnoreCase))
+                    {
+                        posLine = line.Substring("parameters".Length).Trim();
+                    }
+
+                    positiveBuffer.AddRange(SplitPrompts(posLine));
+                    positiveBuilder.AppendLine(posLine);
                 }
                 else
                 {
