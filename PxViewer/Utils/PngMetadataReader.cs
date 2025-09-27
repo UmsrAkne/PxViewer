@@ -76,6 +76,8 @@ namespace PxViewer.Utils
 
             var positiveBuffer = new List<string>();
             var negativeBuffer = new List<string>();
+            var positiveBuilder = new StringBuilder();
+            var negativeBuilder = new StringBuilder();
             var isNegative = false;
 
             // Positive, Negative プロンプトを抽出する。
@@ -101,18 +103,26 @@ namespace PxViewer.Utils
 
                 if (!isNegative)
                 {
-                    positiveBuffer.AddRange(SplitPrompts(line));
-                    meta.RawPositive += line + Environment.NewLine;
+                    var posLine = line;
+                    if (line.StartsWith("parameters", StringComparison.OrdinalIgnoreCase))
+                    {
+                        posLine = line.Substring("parameters".Length).Trim();
+                    }
+
+                    positiveBuffer.AddRange(SplitPrompts(posLine));
+                    positiveBuilder.AppendLine(posLine);
                 }
                 else
                 {
                     negativeBuffer.AddRange(SplitPrompts(line));
-                    meta.RawNegative += line + Environment.NewLine;
+                    negativeBuilder.AppendLine(line);
                 }
             }
 
             meta.PositivePrompts = positiveBuffer;
             meta.NegativePrompts = negativeBuffer;
+            meta.RawPositive = positiveBuilder.ToString().TrimEnd().TrimEnd('r', 'n');
+            meta.RawNegative = negativeBuilder.ToString().TrimEnd().TrimEnd('r', 'n');
 
             // プロンプト以外のメタデータを読み取っていく。行頭には必ず Steps: が来る前提で組んである。現状ではそれ以外では動作しない。
             var otherInfoLine = lines.FirstOrDefault(l => l.StartsWith("Steps:", StringComparison.OrdinalIgnoreCase));
