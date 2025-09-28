@@ -146,6 +146,12 @@ namespace PxViewer.ViewModels
 
             dispatcher.Invoke(() => ImageItemListViewModel.ImageItems.Clear());
 
+            // ディレクトリの数はそこまで多くない想定なので、同期的に列挙してリストに詰める。
+            var directories = Directory.GetDirectories(Folder.Value);
+            var dirVms = directories.Select(d => new ImageItemViewModel(thumbnailService)
+                { IsDirectory = true, Entry = ImageEntry.FromDirectory(d), });
+            await dispatcher.InvokeAsync(() => ImageItemListViewModel.ImageItems.AddRange(dirVms));
+
             await Task.Run(
             () =>
             {
@@ -168,6 +174,7 @@ namespace PxViewer.ViewModels
                 var toAdd = batch.Select(Selector);
                 await Application.Current.Dispatcher.InvokeAsync(() => ImageItemListViewModel.ImageItems.AddRange(toAdd));
             }
+            return;
 
             ImageItemViewModel Selector(ImageEntry i) => new (thumbnailService) { Entry = i, };
         }
