@@ -68,6 +68,7 @@ namespace PxViewer.ViewModels
         {
             if (IsDirectory)
             {
+                ThumbnailPath = Entry.FullPath;
                 return;
             }
 
