@@ -20,6 +20,8 @@
             Key="T"
             Command="{Binding CreateNewTabCommandAsync}"
             Modifiers="Control" />
+
+        <KeyBinding Key="Back" Command="{Binding CurrentTab.NavigateToParentDirectoryAsyncCommand}" />
     </Window.InputBindings>
 
     <Grid>
@@ -118,8 +120,6 @@
                         Command="{Binding CurrentTab.RateImageAsyncCommand}"
                         CommandParameter="{x:Static models:Rating.R5}"
                         Modifiers="Control" />
-
-                    <KeyBinding Key="Back" Command="{Binding CurrentTab.NavigateToParentDirectoryAsyncCommand}" />
 
                     <KeyBinding
                         Key="Enter"
