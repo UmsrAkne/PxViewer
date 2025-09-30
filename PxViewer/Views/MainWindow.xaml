@@ -143,6 +143,7 @@
                                 </i:Interaction.Triggers>
                                 <Image
                                     MaxHeight="60"
+                                    HorizontalAlignment="Left"
                                     Source="{Binding ThumbnailPath, Converter={StaticResource PathToBitmapImageConverter}}"
                                     Stretch="Uniform" />
                             </Border>
