@@ -90,14 +90,30 @@ namespace PxViewer.ViewModels
 
         public AsyncRelayCommand LoadFilesCommand => new (InitializeAsync);
 
-        public AsyncRelayCommand ChangeDirectoryAsyncCommand => new AsyncRelayCommand(async () =>
+        public AsyncRelayCommand<string> ChangeDirectoryAsyncCommand => new (async (param) =>
         {
-            if (string.IsNullOrWhiteSpace(Address) || !Directory.Exists(Address))
+            var url = param ?? Address;
+            if (string.IsNullOrWhiteSpace(url) || !Directory.Exists(url))
             {
                 return;
             }
 
-            Folder = new FolderId(Address);
+            Folder = new FolderId(url);
+            Header = Path.GetFileName(Folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            Address = Folder.Value;
+            await LoadFilesCommand.ExecuteAsync(null);
+        });
+
+        public AsyncRelayCommand NavigateToParentDirectoryAsyncCommand => new (async () =>
+        {
+            var parent = Directory.GetParent(Folder.Value);
+            if (parent is not { Exists: true, })
+            {
+                return;
+            }
+
+            Folder = new FolderId(parent.FullName);
+            Address = Folder.Value;
             Header = Path.GetFileName(Folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
             await LoadFilesCommand.ExecuteAsync(null);
         });
@@ -146,6 +162,12 @@ namespace PxViewer.ViewModels
 
             dispatcher.Invoke(() => ImageItemListViewModel.ImageItems.Clear());
 
+            // ディレクトリの数はそこまで多くない想定なので、同期的に列挙してリストに詰める。
+            var directories = Directory.GetDirectories(Folder.Value);
+            var dirVms = directories.Select(d => new ImageItemViewModel(thumbnailService)
+                { IsDirectory = true, Entry = ImageEntry.FromDirectory(d), });
+            await dispatcher.InvokeAsync(() => ImageItemListViewModel.ImageItems.AddRange(dirVms));
+
             await Task.Run(
             () =>
             {
@@ -168,6 +190,7 @@ namespace PxViewer.ViewModels
                 var toAdd = batch.Select(Selector);
                 await Application.Current.Dispatcher.InvokeAsync(() => ImageItemListViewModel.ImageItems.AddRange(toAdd));
             }
+            return;
 
             ImageItemViewModel Selector(ImageEntry i) => new (thumbnailService) { Entry = i, };
         }

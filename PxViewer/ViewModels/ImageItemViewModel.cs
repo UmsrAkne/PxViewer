@@ -49,6 +49,8 @@ namespace PxViewer.ViewModels
             }
         }
 
+        public bool IsDirectory { get; set; }
+
         public void CancelLoad()
         {
             loadCts?.Cancel();
@@ -64,6 +66,12 @@ namespace PxViewer.ViewModels
 
         public async Task LoadThumbnailAsync(int maxWidth = 256)
         {
+            if (IsDirectory)
+            {
+                ThumbnailPath = Entry.FullPath;
+                return;
+            }
+
             var path = await thumbnailService.GetOrCreateThumbnailPath(Entry.FullPath);
             ThumbnailPath = path;
         }

@@ -44,6 +44,18 @@ namespace PxViewer.Models
             };
         }
 
+        public static ImageEntry FromDirectory(string path)
+        {
+            var fi = new DirectoryInfo(path);
+
+            return new ImageEntry
+            {
+                Id = new ImageId(path.ToLowerInvariant()),
+                FullPath = path,
+                LastWriteUtc = fi.LastWriteTimeUtc,
+            };
+        }
+
         private static Size GetImageDimensions(string path)
         {
             using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
