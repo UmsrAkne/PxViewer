@@ -120,6 +120,11 @@
                         Modifiers="Control" />
 
                     <KeyBinding Key="Back" Command="{Binding CurrentTab.NavigateToParentDirectoryAsyncCommand}" />
+
+                    <KeyBinding
+                        Key="Enter"
+                        Command="{Binding CurrentTab.ChangeDirectoryAsyncCommand}"
+                        CommandParameter="{Binding CurrentTab.SelectedItem.Entry.FullPath}" />
                 </ListBox.InputBindings>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>

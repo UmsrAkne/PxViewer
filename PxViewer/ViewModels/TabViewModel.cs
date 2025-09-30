@@ -90,15 +90,17 @@ namespace PxViewer.ViewModels
 
         public AsyncRelayCommand LoadFilesCommand => new (InitializeAsync);
 
-        public AsyncRelayCommand ChangeDirectoryAsyncCommand => new AsyncRelayCommand(async () =>
+        public AsyncRelayCommand<string> ChangeDirectoryAsyncCommand => new (async (param) =>
         {
-            if (string.IsNullOrWhiteSpace(Address) || !Directory.Exists(Address))
+            var url = param ?? Address;
+            if (string.IsNullOrWhiteSpace(url) || !Directory.Exists(url))
             {
                 return;
             }
 
-            Folder = new FolderId(Address);
+            Folder = new FolderId(url);
             Header = Path.GetFileName(Folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            Address = Folder.Value;
             await LoadFilesCommand.ExecuteAsync(null);
         });
 
