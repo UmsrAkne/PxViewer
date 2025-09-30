@@ -118,6 +118,8 @@
                         Command="{Binding CurrentTab.RateImageAsyncCommand}"
                         CommandParameter="{x:Static models:Rating.R5}"
                         Modifiers="Control" />
+
+                    <KeyBinding Key="Back" Command="{Binding CurrentTab.NavigateToParentDirectoryAsyncCommand}" />
                 </ListBox.InputBindings>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>

@@ -102,6 +102,20 @@ namespace PxViewer.ViewModels
             await LoadFilesCommand.ExecuteAsync(null);
         });
 
+        public AsyncRelayCommand NavigateToParentDirectoryAsyncCommand => new (async () =>
+        {
+            var parent = Directory.GetParent(Folder.Value);
+            if (parent is not { Exists: true, })
+            {
+                return;
+            }
+
+            Folder = new FolderId(parent.FullName);
+            Address = Folder.Value;
+            Header = Path.GetFileName(Folder.Value.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            await LoadFilesCommand.ExecuteAsync(null);
+        });
+
         public AsyncRelayCommand<ImageItemViewModel> LoadThumbnailsAsyncCommand => new (async item =>
         {
             await item.LoadThumbnailAsync();
