@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
+using PxViewer.Models;
 using PxViewer.ViewModels;
 
 namespace PxViewer.Behaviors
@@ -58,8 +60,19 @@ namespace PxViewer.Behaviors
                     // Step 2: 待機中に Ctrl + S 押されたか判定
                     if (e.Key == Key.S)
                     {
-                        // ComboCommand?.Execute(null);
-                        CopySeed();
+                        CopyToClipboard(nameof(PngGenerationMetadata.Seed));
+                        CancelWait();
+                        e.Handled = true;
+                    }
+                    else if (e.Key == Key.P)
+                    {
+                        CopyToClipboard(nameof(PngGenerationMetadata.RawPositive));
+                        CancelWait();
+                        e.Handled = true;
+                    }
+                    else if (e.Key == Key.N)
+                    {
+                        CopyToClipboard(nameof(PngGenerationMetadata.RawNegative));
                         CancelWait();
                         e.Handled = true;
                     }
@@ -77,11 +90,50 @@ namespace PxViewer.Behaviors
             }
         }
 
-        private void CopySeed()
+        private void CopyToClipboard(string targetPropertyName)
         {
             if (vm.CurrentTab != null)
             {
-                Clipboard.SetText(vm.CurrentTab.SelectedItemMeta.Seed.ToString());
+                switch (targetPropertyName)
+                {
+                    case nameof(PngGenerationMetadata.Seed):
+                        CopyToClipboardSafe(vm.CurrentTab.SelectedItemMeta.Seed.ToString());
+                        break;
+                    case nameof(PngGenerationMetadata.RawPositive):
+                        CopyToClipboardSafe(vm.CurrentTab.SelectedItemMeta.RawPositive);
+                        break;
+                    case nameof(PngGenerationMetadata.RawNegative):
+                        CopyToClipboardSafe(vm.CurrentTab.SelectedItemMeta.RawNegative);
+                        break;
+                }
+            }
+
+            return;
+
+            // 制御文字等の不正な文字が混じっているため、クリップボードへの転送に失敗するケースがある。
+            // 通常の文字以外を取り除くためのメソッド
+            void CopyToClipboardSafe(string text)
+            {
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    return;
+                }
+
+                // コントロール文字を除去（改行・タブ以外）
+                var clean = new string(text.Where(c =>
+                    !char.IsControl(c) || c == '\r' || c == '\n' || c == '\t').ToArray());
+
+                // 末尾改行を削る
+                clean = clean.TrimEnd('\r', '\n');
+
+                try
+                {
+                    Clipboard.SetText(clean);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Clipboard error: {ex.Message}");
+                }
             }
         }
 
