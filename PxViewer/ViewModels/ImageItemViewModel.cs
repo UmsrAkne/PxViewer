@@ -19,6 +19,7 @@ namespace PxViewer.ViewModels
         private CancellationTokenSource loadCts;
         private string thumbnailPath = string.Empty;
         private Rating rating;
+        private bool isSelected;
 
         public ImageItemViewModel(IThumbnailService thumbnailService)
         {
@@ -50,6 +51,8 @@ namespace PxViewer.ViewModels
         }
 
         public bool IsDirectory { get; set; }
+
+        public bool IsSelected { get => isSelected; set => SetProperty(ref isSelected, value); }
 
         public void CancelLoad()
         {
