@@ -88,7 +88,8 @@
                 AlternationCount="2"
                 ItemsSource="{Binding CurrentTab.ImageItemListViewModel.FilteredView}"
                 ScrollViewer.CanContentScroll="True"
-                SelectedItem="{Binding CurrentTab.SelectedItem}">
+                SelectedItem="{Binding CurrentTab.SelectedItem}"
+                VirtualizingPanel.ScrollUnit="Pixel">
                 <ListBox.InputBindings>
                     <KeyBinding
                         Key="D0"
