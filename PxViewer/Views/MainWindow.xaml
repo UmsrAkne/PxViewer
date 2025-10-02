@@ -90,6 +90,11 @@
                 ScrollViewer.CanContentScroll="True"
                 SelectedItem="{Binding CurrentTab.SelectedItem}"
                 VirtualizingPanel.ScrollUnit="Pixel">
+
+                <i:Interaction.Behaviors>
+                    <behaviors:ScrollIntoViewOnSelectedBehavior />
+                </i:Interaction.Behaviors>
+
                 <ListBox.InputBindings>
                     <KeyBinding
                         Key="D0"
@@ -131,6 +136,8 @@
                         Key="Enter"
                         Command="{Binding CurrentTab.ChangeDirectoryAsyncCommand}"
                         CommandParameter="{Binding CurrentTab.SelectedItem.Entry.FullPath}" />
+
+                    <KeyBinding Key="N" Command="{Binding CurrentTab.ImageItemListViewModel.JumpToSameRatingItemCommand}" />
                 </ListBox.InputBindings>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
