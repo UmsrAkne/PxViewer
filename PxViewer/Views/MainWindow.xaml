@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:PxViewer.Models"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:PxViewer.ViewModels"
     Title="{Binding Title}"
     Width="1024"
@@ -136,8 +137,21 @@
                         Key="Enter"
                         Command="{Binding CurrentTab.ChangeDirectoryAsyncCommand}"
                         CommandParameter="{Binding CurrentTab.SelectedItem.Entry.FullPath}" />
+                    <KeyBinding Key="N" Command="{Binding CurrentTab.ImageItemListViewModel.JumpToSameRatingItemCommand}">
+                        <KeyBinding.CommandParameter>
+                            <system:Boolean>False</system:Boolean>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
 
-                    <KeyBinding Key="N" Command="{Binding CurrentTab.ImageItemListViewModel.JumpToSameRatingItemCommand}" />
+                    <KeyBinding
+                        Key="N"
+                        Command="{Binding CurrentTab.ImageItemListViewModel.JumpToSameRatingItemCommand}"
+                        Modifiers="Shift">
+                        <KeyBinding.CommandParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
+
                 </ListBox.InputBindings>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>

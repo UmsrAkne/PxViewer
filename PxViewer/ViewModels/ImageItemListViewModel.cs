@@ -28,7 +28,7 @@ namespace PxViewer.ViewModels
 
         public ICollectionView FilteredView { get; set; }
 
-        public DelegateCommand JumpToSameRatingItemCommand => new (() =>
+        public DelegateCommand<bool?> JumpToSameRatingItemCommand => new ((isReverse) =>
         {
             var selected = ImageItems.FirstOrDefault(i => i.IsSelected);
             if (selected == null)
@@ -37,7 +37,10 @@ namespace PxViewer.ViewModels
             }
 
             selected.IsSelected = false;
-            FindNextRatedItem(ImageItems, selected).IsSelected = true;
+            if (isReverse != null)
+            {
+                FindNextRatedItem(ImageItems, selected, isReverse.Value).IsSelected = true;
+            }
         });
 
         public async Task CreateImageItem(string fullPath)
@@ -126,7 +129,7 @@ namespace PxViewer.ViewModels
             return item;
         }
 
-        private ImageItemViewModel FindNextRatedItem(ObservableCollection<ImageItemViewModel> items, ImageItemViewModel targetItem)
+        private ImageItemViewModel FindNextRatedItem(ObservableCollection<ImageItemViewModel> items, ImageItemViewModel targetItem, bool isReverse)
         {
             if (items == null || targetItem == null || items.Count == 0)
             {
@@ -145,7 +148,10 @@ namespace PxViewer.ViewModels
             // 次のインデックスからスタートして一周する（targetItem 自身はスキップ）
             for (var i = 1; i < count; i++)
             {
-                var index = (startIndex + i) % count;
+                var index = isReverse
+                    ? (startIndex - i + count) % count
+                    : (startIndex + i) % count;
+
                 var item = items[index];
 
                 if (Matches(item, targetRating))
