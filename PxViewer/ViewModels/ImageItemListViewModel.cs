@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using Prism.Commands;
 using Prism.Mvvm;
 using PxViewer.Models;
 using PxViewer.Services;
@@ -26,6 +27,21 @@ namespace PxViewer.ViewModels
         public ObservableCollection<ImageItemViewModel> ImageItems { get; } = new ();
 
         public ICollectionView FilteredView { get; set; }
+
+        public DelegateCommand<bool?> JumpToSameRatingItemCommand => new ((isReverse) =>
+        {
+            var selected = ImageItems.FirstOrDefault(i => i.IsSelected);
+            if (selected == null)
+            {
+                return;
+            }
+
+            selected.IsSelected = false;
+            if (isReverse != null)
+            {
+                FindNextRatedItem(ImageItems, selected, isReverse.Value).IsSelected = true;
+            }
+        });
 
         public async Task CreateImageItem(string fullPath)
         {
@@ -111,6 +127,53 @@ namespace PxViewer.ViewModels
             var entry = ImageEntry.FromFile(fullPath);
             var item = new ImageItemViewModel(thumbnailService) { Entry = entry, };
             return item;
+        }
+
+        private ImageItemViewModel FindNextRatedItem(ObservableCollection<ImageItemViewModel> items, ImageItemViewModel targetItem, bool isReverse)
+        {
+            if (items == null || targetItem == null || items.Count == 0)
+            {
+                return targetItem;
+            }
+
+            var startIndex = items.IndexOf(targetItem);
+            if (startIndex == -1)
+            {
+                return targetItem;
+            }
+
+            var targetRating = (int)targetItem.Rating;
+            var count = items.Count;
+
+            // 次のインデックスからスタートして一周する（targetItem 自身はスキップ）
+            for (var i = 1; i < count; i++)
+            {
+                var index = isReverse
+                    ? (startIndex - i + count) % count
+                    : (startIndex + i) % count;
+
+                var item = items[index];
+
+                if (Matches(item, targetRating))
+                {
+                    return item;
+                }
+            }
+
+            // 該当なしならそのまま返す
+            return targetItem;
+
+            bool Matches(ImageItemViewModel item, int targetRatingValue)
+            {
+                if (targetRatingValue == 0)
+                {
+                    return (int)item.Rating >= 1;
+                }
+                else
+                {
+                    return (int)item.Rating == targetRatingValue;
+                }
+            }
         }
     }
 }

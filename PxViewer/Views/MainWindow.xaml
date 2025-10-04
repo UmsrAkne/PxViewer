@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:PxViewer.Models"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:PxViewer.ViewModels"
     Title="{Binding Title}"
     Width="1024"
@@ -88,7 +89,13 @@
                 AlternationCount="2"
                 ItemsSource="{Binding CurrentTab.ImageItemListViewModel.FilteredView}"
                 ScrollViewer.CanContentScroll="True"
-                SelectedItem="{Binding CurrentTab.SelectedItem}">
+                SelectedItem="{Binding CurrentTab.SelectedItem}"
+                VirtualizingPanel.ScrollUnit="Pixel">
+
+                <i:Interaction.Behaviors>
+                    <behaviors:ScrollIntoViewOnSelectedBehavior />
+                </i:Interaction.Behaviors>
+
                 <ListBox.InputBindings>
                     <KeyBinding
                         Key="D0"
@@ -130,6 +137,21 @@
                         Key="Enter"
                         Command="{Binding CurrentTab.ChangeDirectoryAsyncCommand}"
                         CommandParameter="{Binding CurrentTab.SelectedItem.Entry.FullPath}" />
+                    <KeyBinding Key="N" Command="{Binding CurrentTab.ImageItemListViewModel.JumpToSameRatingItemCommand}">
+                        <KeyBinding.CommandParameter>
+                            <system:Boolean>False</system:Boolean>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
+
+                    <KeyBinding
+                        Key="N"
+                        Command="{Binding CurrentTab.ImageItemListViewModel.JumpToSameRatingItemCommand}"
+                        Modifiers="Shift">
+                        <KeyBinding.CommandParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </KeyBinding.CommandParameter>
+                    </KeyBinding>
+
                 </ListBox.InputBindings>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -139,26 +161,49 @@
 
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewModels:ImageItemViewModel}">
-                        <StackPanel>
-                            <Border Margin="2" Padding="4">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Loaded">
-                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.CurrentTab.LoadThumbnailsAsyncCommand}" CommandParameter="{Binding}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <Image
-                                    MaxHeight="60"
-                                    HorizontalAlignment="Left"
-                                    Source="{Binding ThumbnailPath, Converter={StaticResource PathToBitmapImageConverter}}"
-                                    Stretch="Uniform" />
-                            </Border>
-                            <TextBlock Margin="6,0,0,6" Text="{Binding FileName}" />
-                            <TextBlock Margin="6,0,0,6" Text="{Binding Rating, Converter={StaticResource RatingToStarsConverter}}" />
-                        </StackPanel>
+                        <Border BorderThickness="5,0,0,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="BorderBrush" Value="DarkOrange" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="False">
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+
+                            <StackPanel>
+                                <Border
+                                    Margin="2"
+                                    Padding="4"
+                                    BorderBrush="Transparent">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Loaded">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.CurrentTab.LoadThumbnailsAsyncCommand}" CommandParameter="{Binding}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <Image
+                                        MaxHeight="60"
+                                        HorizontalAlignment="Left"
+                                        Source="{Binding ThumbnailPath, Converter={StaticResource PathToBitmapImageConverter}}"
+                                        Stretch="Uniform" />
+                                </Border>
+                                <TextBlock Margin="6,0,0,6" Text="{Binding FileName}" />
+                                <TextBlock Margin="6,0,0,6" Text="{Binding Rating, Converter={StaticResource RatingToStarsConverter}}" />
+                            </StackPanel>
+                        </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
+                        <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+
+                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="Padding" Value="0" />
                         <Style.Triggers>
                             <Trigger Property="ListBox.AlternationIndex" Value="0">
                                 <Setter Property="Background" Value="LightBlue" />

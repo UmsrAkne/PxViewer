@@ -190,6 +190,7 @@ namespace PxViewer.ViewModels
                 var toAdd = batch.Select(Selector);
                 await Application.Current.Dispatcher.InvokeAsync(() => ImageItemListViewModel.ImageItems.AddRange(toAdd));
             }
+
             return;
 
             ImageItemViewModel Selector(ImageEntry i) => new (thumbnailService) { Entry = i, };
