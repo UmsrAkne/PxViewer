@@ -8,5 +8,14 @@
         <SolidColorBrush x:Key="BgBrush" Color="AliceBlue" />
         <converters:PathToBitmapImageConverter x:Key="PathToBitmapImageConverter" />
         <converters:RatingToStarsConverter x:Key="RatingToStarsConverter" />
+        <ResourceDictionary x:Key="Dictionary">
+            <ResourceDictionary.MergedDictionaries>
+                <!--  MaterialDesign themes  -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Teal.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

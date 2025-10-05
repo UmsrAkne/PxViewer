@@ -9,6 +9,9 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+        <PackageReference Include="MaterialDesignThemes" Version="5.3.0-ci1132" />
+        <PackageReference Include="MaterialDesignThemes.MahApps" Version="5.3.0-ci1132" />
+        <PackageReference Include="MaterialDesignThemes.Wpf" Version="1.0.1" />
         <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
