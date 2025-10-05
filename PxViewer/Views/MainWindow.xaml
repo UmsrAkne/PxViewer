@@ -93,7 +93,7 @@
                 VirtualizingPanel.ScrollUnit="Pixel">
 
                 <i:Interaction.Behaviors>
-                    <behaviors:ScrollIntoViewOnSelectedBehavior />
+                    <behaviors:ListBoxSelectionNavigationBehavior />
                 </i:Interaction.Behaviors>
 
                 <ListBox.InputBindings>

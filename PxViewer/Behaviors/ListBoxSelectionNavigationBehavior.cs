@@ -5,7 +5,7 @@ using Microsoft.Xaml.Behaviors;
 
 namespace PxViewer.Behaviors;
 
-public class ScrollIntoViewOnSelectedBehavior : Behavior<ListBox>
+public class ListBoxSelectionNavigationBehavior : Behavior<ListBox>
 {
     protected override void OnAttached()
     {
