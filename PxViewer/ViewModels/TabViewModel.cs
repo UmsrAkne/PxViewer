@@ -146,7 +146,12 @@ namespace PxViewer.ViewModels
 
         public DelegateCommand OpenInputDialogCommand => new (() =>
         {
-               dialogService.ShowDialog(nameof(InputDialog), new DialogParameters(), _ => { });
+            var parameters = new DialogParameters
+            {
+                { "CurrentPath", Address },
+            };
+
+            dialogService.ShowDialog(nameof(InputDialog), parameters, _ => { });
         });
 
         private IFolderScanner FolderScanner { get; set; }
