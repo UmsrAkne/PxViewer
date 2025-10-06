@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.Input;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using PxViewer.Models;
 using PxViewer.Services;
 
@@ -15,10 +16,25 @@ namespace PxViewer.ViewModels
     {
         private readonly TabService tabService = new ();
         private readonly IThumbnailService thumbnailService = new ThumbnailService();
+        private readonly IDialogService dialogService;
         private TabViewModel currentTab;
 
         public DesignTimeMainWindowViewModel()
         {
+            Tabs.Add(CreateTab("testPath1"));
+            Tabs.Add(CreateTab("testPath2"));
+            Tabs.Add(CreateTab("testPath3"));
+
+            CurrentTab = Tabs.First();
+
+            InjectDummies();
+        }
+
+        public DesignTimeMainWindowViewModel(IDialogService dialogService)
+        {
+            this.dialogService = dialogService;
+            tabService.DialogService = dialogService;
+
             Tabs.Add(CreateTab("testPath1"));
             Tabs.Add(CreateTab("testPath2"));
             Tabs.Add(CreateTab("testPath3"));
@@ -43,7 +59,7 @@ namespace PxViewer.ViewModels
 
         private TabViewModel CreateTab(string path)
         {
-            return new TabViewModel(new FolderId(path), thumbnailService);
+            return new TabViewModel(new FolderId(path), thumbnailService, dialogService);
         }
 
         [Conditional("DEBUG")]

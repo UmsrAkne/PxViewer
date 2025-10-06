@@ -7,11 +7,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
+using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using PxViewer.Models;
 using PxViewer.Services;
 using PxViewer.Services.Events;
 using PxViewer.Utils;
+using PxViewer.Views;
 
 namespace PxViewer.ViewModels
 {
@@ -21,6 +24,7 @@ namespace PxViewer.ViewModels
     {
         private readonly CancellationTokenSource cts = new();
         private readonly IThumbnailService thumbnailService;
+        private readonly IDialogService dialogService;
         private readonly int cacheCapacity = 10;
         private readonly DirectoryWatcher directoryWatcher;
         private string header;
@@ -28,7 +32,7 @@ namespace PxViewer.ViewModels
         private ImageItemViewModel selectedItem;
         private PngGenerationMetadata selectedItemMeta;
 
-        public TabViewModel(FolderId folder, IThumbnailService thumbnailService)
+        public TabViewModel(FolderId folder, IThumbnailService thumbnailService, IDialogService dialogService)
         {
             Folder = folder;
             Address = folder.Value;
@@ -46,6 +50,7 @@ namespace PxViewer.ViewModels
             }
 
             ImageItemListViewModel = new ImageItemListViewModel(thumbnailService);
+            this.dialogService = dialogService;
         }
 
         public FolderId Folder { get; private set; }
@@ -137,6 +142,11 @@ namespace PxViewer.ViewModels
             }
 
             return Task.CompletedTask;
+        });
+
+        public DelegateCommand OpenInputDialogCommand => new (() =>
+        {
+               dialogService.ShowDialog(nameof(InputDialog), new DialogParameters(), _ => { });
         });
 
         private IFolderScanner FolderScanner { get; set; }

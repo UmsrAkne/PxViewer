@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using PxViewer.Services;
 using PxViewer.Utils;
 
@@ -10,6 +11,11 @@ namespace PxViewer.ViewModels
     {
         private readonly AppVersionInfo appVersionInfo = new ();
         private readonly TabService tabService = new ();
+
+        public MainWindowViewModel(IDialogService dialogService)
+        {
+            tabService.DialogService = dialogService;
+        }
 
         public string Title => appVersionInfo.GetAppNameWithVersion();
 
