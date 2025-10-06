@@ -11,7 +11,16 @@
     d:DataContext="{d:DesignInstance viewModels:InputDialogViewModel}"
     mc:Ignorable="d">
 
-    <Grid Margin="5">
+    <Page.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CloseCommand}" />
+
+        <KeyBinding
+            Key="Enter"
+            Command="{Binding ConfirmCommand}"
+            Modifiers="Control" />
+    </Page.InputBindings>
+
+    <Grid Margin="5" FocusManager.FocusedElement="{Binding ElementName=InputTextBox}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -23,7 +32,10 @@
             Margin="1,0,0,5"
             Text="Input folder name:" />
 
-        <TextBox Grid.Row="1" Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox
+            x:Name="InputTextBox"
+            Grid.Row="1"
+            Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}" />
 
         <StackPanel
             Grid.Row="2"
@@ -35,11 +47,11 @@
                 Margin="10,0"
                 Padding="20,2"
                 Command="{Binding ConfirmCommand}"
-                Content="Create" />
+                Content="Create (Ctrl + Enter)" />
             <Button
                 Padding="10,2"
                 Command="{Binding CloseCommand}"
-                Content="Cancel" />
+                Content="Cancel (Esc)" />
         </StackPanel>
     </Grid>
 </Page>
