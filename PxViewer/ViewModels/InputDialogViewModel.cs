@@ -9,6 +9,7 @@ namespace PxViewer.ViewModels
     public class InputDialogViewModel : BindableBase, IDialogAware
     {
         private string inputText;
+        private string errorMessage;
 
         public event Action<IDialogResult> RequestClose;
 
@@ -16,6 +17,7 @@ namespace PxViewer.ViewModels
 
         public DelegateCommand CloseCommand => new (() =>
         {
+            ErrorMessage = string.Empty;
             RequestClose?.Invoke(new DialogResult());
         });
 
@@ -24,14 +26,14 @@ namespace PxViewer.ViewModels
             // 入力チェック（空・不正文字）
             if (string.IsNullOrWhiteSpace(CurrentPath))
             {
-                RequestClose?.Invoke(new DialogResult());
+                ErrorMessage = $"({CurrentPath}) is an invalid folder path. Please enter a valid folder path.";
                 return;
             }
 
             var folderName = (InputText ?? string.Empty).Trim();
             if (string.IsNullOrEmpty(folderName) || folderName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
             {
-                RequestClose?.Invoke(new DialogResult());
+                ErrorMessage = $"({folderName}) is an invalid folder name. Please enter a valid folder name.";
                 return;
             }
 
@@ -42,13 +44,17 @@ namespace PxViewer.ViewModels
             }
             catch
             {
-                // 必要に応じてログ出力やユーザー通知を行う
+                ErrorMessage = "The folder could not be created due to an unexpected error.";
+                return;
             }
 
+            ErrorMessage = string.Empty;
             RequestClose?.Invoke(new DialogResult());
         });
 
         public string InputText { get => inputText; set => SetProperty(ref inputText, value); }
+
+        public string ErrorMessage { get => errorMessage; set => SetProperty(ref errorMessage, value); }
 
         public string CurrentPath { get; set; }
 
