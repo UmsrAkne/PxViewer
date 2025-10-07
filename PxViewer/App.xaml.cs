@@ -25,6 +25,8 @@ namespace PxViewer
             // 本番時は MainWindowViewModel を登録
             containerRegistry.Register<IMainWindowVm, MainWindowViewModel>();
             #endif
+
+            containerRegistry.RegisterDialog<InputDialog, InputDialogViewModel>();
         }
 
         protected override void ConfigureViewModelLocator()

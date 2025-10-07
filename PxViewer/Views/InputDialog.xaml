@@ -1,0 +1,62 @@
+<Page
+    x:Class="PxViewer.Views.InputDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:PxViewer.ViewModels"
+    Title="InputDialog"
+    Width="600"
+    Height="Auto"
+    d:DataContext="{d:DesignInstance viewModels:InputDialogViewModel}"
+    mc:Ignorable="d">
+
+    <Page.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CloseCommand}" />
+
+        <KeyBinding
+            Key="Enter"
+            Command="{Binding ConfirmCommand}"
+            Modifiers="Control" />
+    </Page.InputBindings>
+
+    <Grid Margin="5" FocusManager.FocusedElement="{Binding ElementName=InputTextBox}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Margin="1,0,0,5"
+            Text="Input folder name:" />
+
+        <StackPanel Grid.Row="1">
+            <TextBox x:Name="InputTextBox" Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock
+                Margin="0,2,0,0"
+                Foreground="Red"
+                Text="{Binding ErrorMessage}" />
+
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="2"
+            Margin="0,5,0,0"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+
+            <Button
+                Margin="10,0"
+                Padding="20,2"
+                Command="{Binding ConfirmCommand}"
+                Content="Create (Ctrl + Enter)" />
+            <Button
+                Padding="10,2"
+                Command="{Binding CloseCommand}"
+                Content="Cancel (Esc)" />
+        </StackPanel>
+    </Grid>
+</Page>

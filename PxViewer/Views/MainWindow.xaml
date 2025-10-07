@@ -93,7 +93,8 @@
                 VirtualizingPanel.ScrollUnit="Pixel">
 
                 <i:Interaction.Behaviors>
-                    <behaviors:ScrollIntoViewOnSelectedBehavior />
+                    <behaviors:ListBoxSelectionNavigationBehavior />
+                    <behaviors:ListBoxFileDragBehavior />
                 </i:Interaction.Behaviors>
 
                 <ListBox.InputBindings>
@@ -137,6 +138,7 @@
                         Key="Enter"
                         Command="{Binding CurrentTab.ChangeDirectoryAsyncCommand}"
                         CommandParameter="{Binding CurrentTab.SelectedItem.Entry.FullPath}" />
+
                     <KeyBinding Key="N" Command="{Binding CurrentTab.ImageItemListViewModel.JumpToSameRatingItemCommand}">
                         <KeyBinding.CommandParameter>
                             <system:Boolean>False</system:Boolean>
@@ -151,6 +153,11 @@
                             <system:Boolean>True</system:Boolean>
                         </KeyBinding.CommandParameter>
                     </KeyBinding>
+
+                    <KeyBinding
+                        Key="N"
+                        Command="{Binding CurrentTab.OpenInputDialogCommand}"
+                        Modifiers="Control+Shift" />
 
                 </ListBox.InputBindings>
                 <ListBox.ItemsPanel>
