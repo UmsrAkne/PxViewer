@@ -202,22 +202,25 @@ public class ListBoxSelectionNavigationBehavior : Behavior<ListBox>
         {
             e.Handled = true;
 
-            var listBox = AssociatedObject;
             var index = listBox.SelectedIndex + (e.Key == Key.Up ? -1 : 1);
             listBox.SelectedIndex = Math.Min(Math.Max(0, index), listBox.Items.Count - 1);
+            return;
         }
 
+        // G: 先頭/末尾へジャンプ（Shift で末尾）
         if (e.Key is Key.G)
         {
-            var listBox = AssociatedObject;
-            if (listBox.Items.Count == 0)
+            var count = listBox.Items.Count;
+            if (count == 0)
             {
                 return;
             }
 
             listBox.SelectedIndex = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)
-                ? listBox.Items.Count - 1
+                ? count - 1
                 : 0;
+
+            e.Handled = true;
         }
     }
 }
