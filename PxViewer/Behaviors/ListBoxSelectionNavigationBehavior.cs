@@ -26,7 +26,7 @@ public class ListBoxSelectionNavigationBehavior : Behavior<ListBox>
         base.OnDetaching();
         AssociatedObject.Loaded -= OnLoaded;
         AssociatedObject.SelectionChanged -= OnSelectionChanged;
-        AssociatedObject.PreviewKeyDown += OnPreviewKeyDown;
+        AssociatedObject.PreviewKeyDown -= OnPreviewKeyDown;
     }
 
     private static T FindDescendant<T>(DependencyObject root)
