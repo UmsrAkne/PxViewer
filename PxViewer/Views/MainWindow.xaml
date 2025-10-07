@@ -94,6 +94,7 @@
 
                 <i:Interaction.Behaviors>
                     <behaviors:ListBoxSelectionNavigationBehavior />
+                    <behaviors:ListBoxFileDragBehavior />
                 </i:Interaction.Behaviors>
 
                 <ListBox.InputBindings>
